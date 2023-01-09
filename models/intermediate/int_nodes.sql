@@ -10,7 +10,7 @@ with
         from flows
     ),
 
-    unnest_nodes_array as (
+    unnest_nodes as (
         select
             json_value(node, "$.uuid") as node_uuid,
             extract_nodes_array.flow_uuid,
@@ -30,4 +30,4 @@ with
     )
 
 select *
-from unnest_nodes_array
+from unnest_nodes
