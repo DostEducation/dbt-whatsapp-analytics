@@ -1,0 +1,20 @@
+version: 2
+
+sources:
+  - name: glific
+    description: dataset created by Glific on BigQuery
+    database: cryptic-gate-211900
+    schema: '918800625442'
+    tables:
+      - name: contacts
+      - name: contact_histories
+      - name: flows
+      - name: flow_contexts
+      - name: flow_results
+      - name: flow_counts
+      - name: messages
+      - name: messages_media
+      - name: message_broadcasts
+      - name: message_broadcast_contacts
+      - name: message_conversations
+      - name: profiles
