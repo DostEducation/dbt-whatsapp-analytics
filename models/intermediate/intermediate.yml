@@ -1,0 +1,6 @@
+version: 2
+
+models:
+  - name: int_node_counts
+    columns:
+      - name: source_node_uuid
