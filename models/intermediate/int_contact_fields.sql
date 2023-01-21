@@ -3,7 +3,7 @@ with
 
     unnest_contact_fields as (
         select
-            contacts.id as contact_id,
+            contact_id,
             lower(contact_fields.label) contact_field,
             lower(contact_fields.value) contact_field_value
         from contacts, unnest(contacts.fields) as contact_fields

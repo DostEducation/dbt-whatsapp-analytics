@@ -30,7 +30,7 @@ with
         select
             id as message_id,
             bq_uuid,
-            uuid,
+            uuid as message_uuid,
             body,
             type,
             flow,

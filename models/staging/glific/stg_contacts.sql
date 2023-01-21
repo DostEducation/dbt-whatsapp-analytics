@@ -32,12 +32,12 @@ with
             updated_at as contact_updated_at,
             user_name,
             user_role,
-            -- fields,
-            -- settings,
+            fields,
+            settings,       -- what is saved here?
             -- groups,
-            tags,
-            -- raw_fields,
-            -- group_labels,
+            tags,           -- what is saved here?
+            raw_fields,     -- what is saved here?
+            group_labels,   
             bq_inserted_at as contact_bq_inserted_at,
         from get_latest_contact_record
     )
