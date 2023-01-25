@@ -2,10 +2,6 @@ with
     flows as (select * from {{ ref("stg_flows") }}),
 
     extract_nodes_array as (
-        -- name as flow_name,
-        -- status as flow_status,
-        -- inserted_at as flow_created_on,
-        -- updated_at as flow_updated_on,
         select flow_uuid, json_query_array(flow_config_json, "$.nodes") as nodes,
         from flows
     ),
