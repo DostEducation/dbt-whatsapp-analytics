@@ -34,7 +34,7 @@ with
             user_role,
             fields,
             settings,       -- what is saved here?
-            -- groups,
+            `groups` as contact_groups,
             tags,           -- what is saved here?
             raw_fields,     -- what is saved here?
             group_labels,   
