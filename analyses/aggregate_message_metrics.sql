@@ -5,7 +5,6 @@ with
         select
             type,
             status,
-            -- count(message_id) as count_of_messages,
             count(distinct contact_phone) as count_of_users,
         from messages
         where status <> 'enqueued'
