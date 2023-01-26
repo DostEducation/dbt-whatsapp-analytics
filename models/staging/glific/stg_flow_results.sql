@@ -5,7 +5,7 @@ with
         select
             *,
             row_number() over (
-                partition by uuid order by updated_at desc
+                partition by uuid, contact_phone order by updated_at desc
             ) as row_number
         from flow_results
     ),
@@ -18,7 +18,9 @@ with
 
     rename_columns as (
         select
-            uuid as flow_result_uuid,
+            id as flow_result_id,
+            bq_uuid as flow_result_bq_uuid,
+            uuid as flow_uuid,
             inserted_at as flow_result_inserted_at,
             updated_at as flow_result_updated_at,
             results,
