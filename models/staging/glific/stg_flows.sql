@@ -1,17 +1,17 @@
 with
-    src as (select * from {{ source("glific", "flows") }}),
+    flows as (select * from {{ source("glific", "flows") }}),
 
-    add_max_bq_inserted_at as (
+    identify_latest_flow as (
         select
             *,
             row_number() over (
-                partition by uuid order by bq_inserted_at desc
+                partition by uuid order by updated_at desc
             ) as row_number
-        from src
+        from flows
     ),
 
     filter_latest_version_of_flow as (
-        select * from add_max_bq_inserted_at where row_number = 1
+        select * from identify_latest_flow where row_number = 1
     ),
 
     select_and_rename_columns as (
