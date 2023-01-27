@@ -3,10 +3,11 @@ with
 
     select_columns_and_extract_keys as (
         select
-            flow_result_uuid,
-            -- flow_version,
-            -- contact_phone,
-            -- flow_context_id,
+            flow_result_id,
+            flow_uuid,
+            flow_version,
+            flow_context_id,
+            contact_phone,
             results,
             `cryptic-gate-211900.918800625442.jsonObjectKeys`(results) as json_key_string
         from flow_results
@@ -29,3 +30,4 @@ with
     )
 
 select * from extract_results
+-- where contact_phone = '919819352801'

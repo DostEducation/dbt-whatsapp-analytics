@@ -4,8 +4,10 @@ with
     unnest_contact_fields as (
         select
             contact_id,
+            contact_phone,
             lower(contact_fields.label) contact_field,
-            lower(contact_fields.value) contact_field_value
+            lower(contact_fields.value) contact_field_value,
+            contact_fields.inserted_at as contact_field_inserted_at
         from contacts, unnest(contacts.fields) as contact_fields
         where array_length(contacts.fields) > 0
     ),
@@ -37,3 +39,7 @@ with
 
 select *
 from unnest_contact_fields
+where
+    true
+    and contact_phone = '919819352801'
+    and contact_field = 'contact type'

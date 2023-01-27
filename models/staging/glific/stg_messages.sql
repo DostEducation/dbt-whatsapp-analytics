@@ -71,3 +71,8 @@ with
     )
 
 select * from select_and_rename_columns
+where
+    true
+    and contact_phone = '919819352801'
+    and flow = 'inbound'
+order by inserted_at desc

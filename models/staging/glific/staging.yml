@@ -26,4 +26,9 @@ models:
         combination_of_columns:
           - flow_uuid
           - contact_phone
+    columns:
+    - name: flow_result_id
+      tests:
+        - unique
+        - not_null
 

@@ -5,7 +5,7 @@ with
         select
             *,
             row_number() over (
-                partition by uuid, contact_phone order by updated_at desc
+                partition by id order by bq_inserted_at desc
             ) as row_number
         from flow_results
     ),
@@ -28,8 +28,13 @@ with
             contact_phone,
             flow_context_id,
             bq_inserted_at as flow_result_bq_inserted_at,
-            profile_id
+            profile_id, row_number
         from get_latest_flow_results
     )
 
 select * from rename_columns
+where
+    true
+    -- and contact_phone = '919819352801'
+    and flow_uuid = '75640ab7-992c-40b8-9113-df8c4bdf2a65'
+order by flow_result_id
