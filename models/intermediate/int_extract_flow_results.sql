@@ -3,7 +3,7 @@ with
 
     unnest_result_jsons as (
         select
-            *,
+            * except(result_array),
         from
             flow_results,
             unnest(result_array) as result_json
@@ -11,7 +11,7 @@ with
 
     extract_result_details as (
         select
-            *,
+            * except(result_json),
             json_value(result_json, '$.result_key') as result_key,
             json_value(result_json, '$.category') as result_category,
             json_value(result_json, '$.input') as result_input,
