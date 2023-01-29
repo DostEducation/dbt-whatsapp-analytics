@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: stg_flow_counts
+    columns:
+      - name: flow_count_id
+        tests:
+          - unique
+          - not_null
+  - name: stg_contacts
+    columns:
+    - name: contact_id
+      tests:
+        - unique
+        - not_null
+  - name: stg_flows
+  - name: stg_messages
+    columns:
+    - name: message_id
+      tests:
+        - unique
+        - not_null
+  - name: stg_flow_results
+    columns:
+    - name: flow_result_id
+      tests:
+        - unique
+        - not_null
+

@@ -3,11 +3,11 @@ with
 
     unnest_contact_groups as (
         select
-            contacts.id as contact_id,
-            contact_groups.label as group_name
+            contact_id,
+            contact_groups.label as group_name,
         from contacts
-        left join unnest(contacts.groups) as contact_groups
-        where array_length(contacts.groups) > 0
+        left join unnest(contact_groups) as contact_groups
+        where contact_groups is not null
     )
 
 select *
