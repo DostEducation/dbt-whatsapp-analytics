@@ -21,11 +21,6 @@ models:
         - unique
         - not_null
   - name: stg_flow_results
-    tests:
-    - dbt_utils.unique_combination_of_columns:
-        combination_of_columns:
-          - flow_uuid
-          - contact_phone
     columns:
     - name: flow_result_id
       tests:

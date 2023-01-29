@@ -1,33 +1,28 @@
 with
     flow_results as (select * from {{ ref('stg_flow_results') }}),
 
-    select_columns_and_extract_keys as (
-        select
-            flow_result_id,
-            flow_uuid,
-            flow_version,
-            flow_context_id,
-            contact_phone,
-            results,
-            `cryptic-gate-211900.918800625442.jsonObjectKeys`(results) as json_key_string
-        from flow_results
-    ),
-
-    unnest_keys as (
-        select
-            *
-        from
-            select_columns_and_extract_keys,
-            unnest(json_key_string) as key_array
-    ),
-
-    extract_results as (
+    unnest_result_jsons as (
         select
             *,
-            json_value_array(key_array) [offset(0)] as result_name,
-            json_value_array(key_array) [offset(1)] as result_value,
-        from unnest_keys
+        from
+            flow_results,
+            unnest(result_array) as result_json
+    ),
+
+    extract_result_details as (
+        select
+            *,
+            json_value(result_json, '$.result_key') as result_key,
+            json_value(result_json, '$.category') as result_category,
+            json_value(result_json, '$.input') as result_input,
+            json_value(result_json, '$.inserted_at') as result_inserted_at,
+            json_value(result_json, '$.intent') as result_intent,
+            json_query(result_json, '$.interactive') as result_interactive,
+        from
+            unnest_result_jsons
     )
 
-select * from extract_results
--- where contact_phone = '919819352801'
+select * from extract_result_details
+where
+    true
+    -- and flow_result_id = 5107197
