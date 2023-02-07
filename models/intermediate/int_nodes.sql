@@ -19,6 +19,7 @@ with
             json_value(node, "$.actions[0].text") as message_text_n1,
             json_value(node, "$.actions[0].groups[0].name") as group_name_n1,
             json_value(node, "$.actions[0].value") as field_value_n1,
+            json_query(node, "$.actions[0].labels") as node_labels,
             json_query(node, "$") as node_config
         from extract_nodes_array, unnest(extract_nodes_array.nodes) node
         with
@@ -27,4 +28,5 @@ with
 
 select *
 from unnest_nodes
+where flow_uuid = '75640ab7-992c-40b8-9113-df8c4bdf2a65'
 

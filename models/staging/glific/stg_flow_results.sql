@@ -27,7 +27,6 @@ with
             flow_context_id,
             bq_inserted_at as flow_result_bq_inserted_at,
             profile_id,
-            row_number
         from get_latest_flow_results
     ),
 
