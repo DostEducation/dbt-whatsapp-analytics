@@ -2,28 +2,201 @@ version: 2
 
 models:
   - name: stg_flow_counts
+    description: ""
     columns:
       - name: flow_count_id
+        description: Primary Key of table flow counts
         tests:
           - unique
           - not_null
+      - name: flow_count_uuid
+        description: Flow count Unique UUID for the row (allowes us to delete duplicates)
+      - name: flow_count_type
+        description: Type of the Flow count
+      - name: flow_uuid
+        description: UUID of the flows 
+      - name: source_node_uuid
+        description: UUID of the source node
+      - name: destination_node_uuid
+        description: UUID of the destination node 
+      - name: flow_count
+        description: Travel count for a node
+       
   - name: stg_contacts
     columns:
-    - name: contact_id
-      tests:
-        - unique
-        - not_null
+      - name: contact_id
+        description: Primary key for table stg_contacts
+        tests:
+          - unique
+          - not_null
+      - name: contact_bq_uuid
+        description: Unique uuid for the row(allows us to delete duplicate)
+      - name: contact_name
+        description: Name of the user
+      - name: contact_phone
+        description: Phone number of the user, primary point of identification
+      - name: provider_status
+        description: Whatsapp connection status; current options are processing, valid, invalid and failed
+      - name: contact_status
+        description: Provider status, current options are valid , invalid or blocked
+      - name: contact_language
+        description: opted language of the user for templated and other communications
+      - name: contact_optin_method
+        description: The source from the contact got optin into Gliffic
+      - name: contact_optin_time
+        description: Time when we recorded an opt-in from the user
+      - name: contact_optout_time
+        description: Time when we recorded an opt-out from the user
+      - name: contact_last_message_at
+        description: Timestamp of the most recent message sent by the user to ensure we can send a valid message to the user (<24)
+      - name: contact_inserted_at
+        description: Time when the record entry was first made
+      - name: contact_updated_at
+        description: Time when record entry was last updated
+      - name: user_name
+        description: If contact is a user and their respective user name
+      - name: user_role
+        description: If contact is a user and their respective role
+      - name: fields
+        description: NGO generated fields for the user generated as a map
+      - name: settings
+        description: Store the settings of the user as a map (which is a jsonb object in psql). Preferences is one field in the settings(for now). The NGO can use this field to target the user with messages based on their preferences.
+      - name: contact_groups
+        description: Group that the contact belongs to
+      - name: tags
+        description: Tags associated with the contact
+      - name: raw_fields
+        description: JSON object for storing the contact fields
+      - name: group_labels
+        description: Label of all the groups that the contact belongs to
+      - name: contact_bq_inserted_at
+        description: Time when the record entry was made on bigquery
   - name: stg_flows
-  - name: stg_messages
     columns:
+      - name: flow_id
+        description: Primary key for table stg_flows
+      - name: flow_uuid
+        description: Unique UUID generated for each row (allows us to delete duplicates)
+      - name: flow_name
+        description: Name of the created flow
+      - name: flow_status
+        description: Status of the flow revision draft or done
+      - name: inserted_at
+        description: Time when the flow was first created
+      - name: updated_at
+        description: Time when the flow was last updated
+      - name: flow_config_json
+        description: Revision number for the flow, if any revisions/ modifications were made
+      - name: keywords
+        description: List of keywords to trigger the flow
+  - name: stg_messages
+    columns: 
     - name: message_id
+      description: Unique ID generated for each message
       tests:
         - unique
         - not_null
+    - name: bq_uuid
+      description: Unique UUID for the row (allows us to delete duplicates)
+    - name: message_uuid
+      description: Uniquely generated message UUID, primarily needed for the flow editor
+    - name: body
+      description: Body of the message
+    - name: type
+      description: Type of the message, options are - text, audio, video, image, location, contact, file, sticker
+    - name: flow
+      description: Whether an inbound or an outbound message
+    - name: status
+      description: Delivery status of the message
+    - name: errors
+      description: Errors if any while sending the message
+    - name: sender_phone
+      description: Contact number of the sender of the message
+    - name: receiver_phone
+      description: Contact number of the receiver of the message
+    - name: contact_phone
+      description: Either sender contact number or receiver contact number, created to quickly let us know who the beneficiary is 
+    - name: contact_name
+      description: Either sender contact name or receiver contact name, created to quickly let us know who the beneficiary is
+    - name: user_phone
+      description: User ID, this will be null for automated messages and messages received
+    - name: user_name
+      description: User contact name
+    - name: media_url
+      description: Message media ID
+    - name: sent_at
+      description: Timestamp when message was sent from queue worker
+    - name: inserted_at
+      description: Time when the record entry was first made
+    - name: tags_label
+      description: Tags assigned to the messages, if any
+    - name: flow_label
+      description: Flow label associated with the message
+    - name: flow_name
+      description: Flow associated with the message
+    - name: flow_uuid
+      description: Flow UUID for joining with flow/flow_results
+    - name: flow_id
+      description: Flow ID for joining with flow/flow_results
+    - name: longitude
+      description: Longitude from where the message was sent 
+    - name: latitude
+      description: Latitude from where the message was sent
+    - name: updated_at
+      description: Time when the record entry was last updated
+    - name: gcs_url
+      description: URL of media file stored in GCS
+    - name: is_hsm
+      description: Status if the message was an HSM
+    - name: template_uuid
+      description: Reference ID for an HSM
+    - name: interactive_template_id
+      description: Reference ID for an interactive template 
+    - name: context_message_id
+      description: Context message id for a template response
+    - name: group_message_id
+      description: Group message id when a flow started for a group
+    - name: flow_broadcast_id
+      description: Flow broadcast id when a flow started for a group
+    - name: media_id
+      description: ID of the message media table reference to the message media table
+    - name: bq_inserted_at
+      description: Time when the record entry was made of bigquery
+    - name: bsp_status
+      description: Message status as per the BSP. Options- Sent, Delivered or Read
+    - name: profile_id
+      description: ID of the profile table reference to the profile table
+    - name: message_broadcast_id
+      description: Message broadcast id when a flow or message started for a group
+    - name: group_id
+      description: ID of the group reference to the group table
+    - name: group_name
+      description: Label of the group referenced to in group table
   - name: stg_flow_results
+    description:
     columns:
     - name: flow_result_id
+      description: Primary Key for table flow results
       tests:
         - unique
         - not_null
-
+    - name: flow_result_bq_uuid
+      description: Unique UUID for the row (allows us to delete duplicates)
+    - name: flow_uuid
+      description: Unique ID of the flow; we store flows with both id and uuid, since flow editor always refers to a flow by its uuid
+    - name: flow_result_inserted_at
+      description: Time when the flow results entry was first created for a user
+    - name: flow_result_updated_at
+      description: Time when the flow results entry was last updated for a user
+    - name: results
+      description: JSON object for storing the user responses
+    - name: flow_version
+      description: Which specific published version of the flow is being referred to
+    - name: contact_phone
+      description: Phone number of the contact interacting with the flow
+    - name: flow_context_id
+      description: ID of the flow context with which the user is associated to in the flow
+    - name: flow_result_bq_inserted_at
+      description: Time when the record entry was made on bigquery
+    - name: profile_id
+      description: ID of the profile table reference to the profile table
