@@ -7,14 +7,26 @@ sources:
     schema: '918800625442'
     tables:
       - name: contacts
+        description: Contact information of the user.
       - name: contact_histories
+        description: Past information of the users that were saved.
       - name: flows
+        description: This gives you information about the flow that goes out to the users like flow status, flow name etc.
       - name: flow_contexts
+        description: Gives the context of the flow whether the flow was killed, information about content, user etc.
       - name: flow_results
+        description: The result that is stored when the user gives input.
       - name: flow_counts
+        description: information about travel node count.
       - name: messages
+        description: Information about the kind of messages that goes out that is from media info to user info to flow info to group info.
       - name: messages_media
+        description: Information about the kind of media that goes out in a message.
       - name: message_broadcasts
+        description: Information about the kind of message that went out and to what group.
       - name: message_broadcast_contacts
+        description: contact information of the users who are in the broadcast group.
       - name: message_conversations
+        description: Records of all the messages that gets saved of the registered user that is conversations between the bot and the user.
       - name: profiles
+        description: Information about the users that are registered.
