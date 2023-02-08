@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: int_extract_flow_results
+    tests:
+    - dbt_utils.unique_combination_of_columns:
+        combination_of_columns:
+          - flow_result_id
+          - result_key
+  
