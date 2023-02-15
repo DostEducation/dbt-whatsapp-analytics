@@ -8,3 +8,81 @@ models:
           - flow_result_id
           - result_key
   
+    # description:
+    # columns:
+    #   - name: 
+    #     description: ""
+    #   - name: flow_result_id
+    #     description: Primary key for the table 
+      # - name: flow_result_bq_uuid	
+    #     description: Unique UUID for the row (allows us to delete duplicates)   
+    #   - name: flow_uuid
+    #     description:  Unique ID of the flow; we store flows with both id and uuid, since flow editor always refers to a flow by its uuid
+    #   - name: flow_result_inserted_at
+    #     description: Time when the flow results entry was first created for a user   
+    #   - name: flow_result_updated_at	
+    #     description: Time when the flow results entry was last updated for a user   
+    #   - name: results
+    #     description: JSON object for storing the user responses
+    #   - name: flow_version
+    #     description: Which specific published version of the flow is being referred to
+    #   - name: contact_phone
+    #     description: 
+    #   - name: flow_context_id
+    #     description:    
+    #   - name: flow_result_bq_inserted_at
+    #     description:    
+    #   - name: profile_id
+    #     description:    
+    #   - name: row_number
+    #     description:    
+    #   - name: result_array
+    #     description:    
+    #   - name: result_json
+    #     description:    
+    #   - name: result_key
+    #     description:    
+    #   - name: result_category
+    #     description:    
+    #   - name: result_input
+    #     description:    
+    #   - name: result_inserted_at
+    #     description:    
+    #   - name: result_intent
+    #     description:    
+    #   - name: result_interactive
+    #     description:    
+  
+  - name: int_contact_fields
+  
+  - name: int_contact_groups
+    columns: 
+      - name: contact_id
+        description: primary key for this table
+        tests: 
+          - not_null
+          - unique
+
+  - name: int_node_counts
+    columns: 
+      - name: flow_uuid
+        description: Unique UUID generated for each row
+        tests: 
+          - unique
+  
+  - name: int_node_exits
+    columns: 
+      - name: node_uuid
+        description: unique key for this table
+        tests: 
+          - not_null
+          - unique
+  
+  - name: int_nodes
+    tests:
+    - dbt_utils.unique_combination_of_columns:
+        combination_of_columns:
+          - flow_uuid
+          - node_uuid
+
+  - name: int_node_types_configured
