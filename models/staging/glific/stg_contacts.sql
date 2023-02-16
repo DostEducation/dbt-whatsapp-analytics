@@ -44,3 +44,6 @@ with
 
 select *
 from select_and_rename_columns
+where
+    true
+    and contact_phone in ('919819352801', '919321578978')

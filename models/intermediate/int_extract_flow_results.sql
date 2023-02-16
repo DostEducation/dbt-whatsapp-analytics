@@ -26,3 +26,5 @@ select * from extract_result_details
 where
     true
     -- and flow_result_id = 5107197
+    and contact_phone in ('919819352801', '919321578978')
+    and flow_result_bq_inserted_at >= '2023-02-15'

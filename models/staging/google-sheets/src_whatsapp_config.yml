@@ -1,0 +1,14 @@
+version: 2
+
+sources:
+  - name: whatsapp_analytics_config
+    description: dataset created by Glific on BigQuery
+    database: cryptic-gate-211900
+    schema: 'whatsapp_analytics_config'
+    # location: "asia-south1"
+    tables:
+      - name: src_collections
+      - name: src_contact_fields
+      - name: src_contacts_expected
+      - name: src_flows
+      - name: src_nodes

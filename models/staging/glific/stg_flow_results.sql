@@ -70,3 +70,4 @@ where
         '9c797785-3062-4295-a824-c3237ecbc98a', -- aws registration 1.1
         'a4900527-f7bc-4dd7-afea-32803280cde1' -- aws registration 1.2
     )
+    and contact_phone in ('919819352801', '919321578978')
