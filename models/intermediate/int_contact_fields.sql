@@ -39,8 +39,3 @@ with
 
 select *
 from unnest_contact_fields
-where
-    true
-    and contact_phone in ('919819352801', '919321578978')
-    and contact_field_inserted_at >= '2023-02-15'
-    -- and contact_field = 'contact type'

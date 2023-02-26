@@ -9,7 +9,6 @@ with
         left join unnest(contact_groups) as contact_groups
         where
             contact_groups is not null
-            and contact_phone in ('919819352801', '919321578978')
     )
 
 select *

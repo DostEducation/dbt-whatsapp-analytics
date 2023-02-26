@@ -7,9 +7,9 @@ with source as (
 renamed as (
 
     select
-        id,
+        id as google_sheet_id,
         name,
-        phone,
+        phone as contact_phone,
         sector,
         user_type,
         reporting_to,
