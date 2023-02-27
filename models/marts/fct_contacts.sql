@@ -1,15 +1,10 @@
 with
-    glific_contacts as (select * from {{ ref('stg_contacts') }}),
+    contacts as (select * from {{ ref('int_contacts') }}),
 
-    googlesheet_contacts as (select * from {{ ref('stg_contacts_expected') }})
+    AWS_metrics as (select * from {{ ref('int_AWS_metrics') }})
 
 select
     *,
-    case
-        when contact_id is not null and google_sheet_id is not null then 'complete'
-        when contact_id is null then 'pending'
-        when google_sheet_id is null then 'not added to google sheet'
-    end as onboarding_status,
 from
-    googlesheet_contacts
-    full outer join glific_contacts using (contact_phone)
+    contacts
+    left join AWS_metrics using (google_sheet_id)

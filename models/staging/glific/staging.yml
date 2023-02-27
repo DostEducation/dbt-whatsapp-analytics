@@ -36,6 +36,9 @@ models:
         description: Name of the user
       - name: contact_phone
         description: Phone number of the user, primary point of identification
+        tests:
+          - unique
+          - not_null
       - name: provider_status
         description: Whatsapp connection status; current options are processing, valid, invalid and failed
       - name: contact_status
