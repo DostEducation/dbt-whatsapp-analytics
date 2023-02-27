@@ -19,27 +19,23 @@ with
             contact_field_value,
             count(contact_id) as count_of_contacts
         from unnest_contact_fields
-        where
-            contact_field in (
-                'qge group',
-                'parent',
-                'center',
-                'district',
-                'sector',
-                'education',
-                'no of children',
-                'block',
-                'system_phone',
-                'occupation',
-                'audio aharing'
-            )
+        -- where
+        --     contact_field in (
+        --         'qge group',
+        --         'parent',
+        --         'center',
+        --         'district',
+        --         'sector',
+        --         'education',
+        --         'no of children',
+        --         'block',
+        --         'system_phone',
+        --         'occupation',
+        --         'audio aharing'
+        --     )
         group by 1, 2
         order by 1, 2
     )
 
 select *
 from unnest_contact_fields
-where
-    true
-    and contact_phone = '919819352801'
-    and contact_field = 'contact type'
