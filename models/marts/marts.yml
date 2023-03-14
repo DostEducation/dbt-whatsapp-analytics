@@ -1,0 +1,11 @@
+version: 2
+
+models:
+  
+  - name: fct_contacts
+    columns: 
+      - name: contact_phone
+        description: primary key for this table
+        tests: 
+          - not_null
+          - unique
