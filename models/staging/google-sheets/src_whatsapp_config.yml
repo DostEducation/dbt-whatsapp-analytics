@@ -9,6 +9,8 @@ sources:
     tables:
       - name: src_collections
       - name: src_contact_fields
-      - name: src_contacts_expected
+      - name: src_contacts_expected_aww
+      - name: src_contacts_expected_aws
       - name: src_flows
       - name: src_nodes
+      - name: src_geographies
