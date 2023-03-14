@@ -9,7 +9,7 @@ renamed as (
     select
         id as google_sheet_id,
         name,
-        phone as contact_phone,
+        concat('91', phone) as contact_phone,
         block,
         sector,
         district,

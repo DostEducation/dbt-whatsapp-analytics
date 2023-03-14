@@ -12,7 +12,7 @@ with
             AWW_contacts.google_sheet_id as AWW_id,
             AWW_contacts.onboarding_status as AWW_onboarding_status,
         from AWS_contacts
-            left join AWW_contacts on AWS_contacts.google_sheet_id = AWW_contacts.reporting_to
+            left join AWW_contacts on AWS_contacts.name = AWW_contacts.reporting_to
     ),
 
     total_AWWs_mapped as (
