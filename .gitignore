@@ -1,4 +1,6 @@
-
+.dbtenv/
 target/
+.user.yml
 dbt_packages/
 logs/
+.vscode/settings.json
