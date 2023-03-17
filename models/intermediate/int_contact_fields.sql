@@ -12,30 +12,17 @@ with
         where array_length(contacts.fields) > 0
     ),
 
-    -- only for reference
-    aggregate_by_label as (
+    add_row_number as (
         select
-            contact_field,
-            contact_field_value,
-            count(contact_id) as count_of_contacts
+            *,
+            row_number() over (partition by contact_phone, contact_field order by contact_field_inserted_at desc) as row_number
         from unnest_contact_fields
-        -- where
-        --     contact_field in (
-        --         'qge group',
-        --         'parent',
-        --         'center',
-        --         'district',
-        --         'sector',
-        --         'education',
-        --         'no of children',
-        --         'block',
-        --         'system_phone',
-        --         'occupation',
-        --         'audio aharing'
-        --     )
-        group by 1, 2
-        order by 1, 2
+    ),
+
+    select_latest_inserted_row as (
+        select * from add_row_number where row_number = 1
     )
 
 select *
-from unnest_contact_fields
+from select_latest_inserted_row
+

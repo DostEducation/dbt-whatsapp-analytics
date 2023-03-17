@@ -31,10 +31,10 @@ with
             id as message_id,
             bq_uuid,
             uuid as message_uuid,
-            body,
-            type,
-            flow,
-            status,
+            body as message_body,
+            type as message_type,
+            flow as message_direction,
+            status as message_status,
             errors,
             sender_phone,
             receiver_phone,
@@ -44,7 +44,7 @@ with
             user_name,
             media_url,
             sent_at,
-            inserted_at,
+            inserted_at as message_inserted_at,
             tags_label,
             lower(flow_label) as node_label,
             flow_name,
@@ -71,14 +71,3 @@ with
     )
 
 select * from select_and_rename_columns
-where
-    true
-    and flow_uuid in (
-        'bf2e5555-689f-4708-b9b5-cc6bab8ecf70', -- activation flow
-        '094ed199-1b6c-42a6-80bb-f46617fbb937', -- aws registration 1.0
-        '9c797785-3062-4295-a824-c3237ecbc98a', -- aws registration 1.1
-        'a4900527-f7bc-4dd7-afea-32803280cde1' -- aws registration 1.2
-    )
-    and contact_phone in (/* '919819352801', */ '919321578978')
-    and flow = 'outbound'
-order by inserted_at desc

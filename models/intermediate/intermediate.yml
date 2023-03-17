@@ -3,6 +3,11 @@ version: 2
 models:
   
   - name: int_contact_fields
+    tests:
+    - dbt_utils.unique_combination_of_columns:
+        combination_of_columns:
+          - contact_phone
+          - contact_field
 
   - name: int_contacts
     columns: 
@@ -19,7 +24,15 @@ models:
         tests: 
           - not_null
           - unique
-  
+
+  - name: int_latest_flow_for_user
+    columns: 
+      - name: contact_phone
+        description: primary key for this table
+        tests: 
+          - not_null
+          - unique
+
   - name: int_contact_groups
     columns: 
       - name: contact_id

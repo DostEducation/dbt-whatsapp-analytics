@@ -5,6 +5,8 @@ with
 
     aws_contacts_expected as (select * from {{ ref("stg_contacts_expected_aws") }}),
 
+    user_type as (select * from {{ ref('int_contact_fields') }} where contact_field = 'user type'),
+
     append_aws_and_aww_contacts_expected as (
         select * from aws_contacts_expected
         union all
@@ -26,4 +28,7 @@ with
         full outer join glific_contacts using (contact_phone)
     )
 
-select * from join_expected_and_actual_contacts
+-- select * from join_expected_and_actual_contacts
+-- where contact_inserted_at >= '2023-03-15'
+
+select * from user_type
