@@ -43,4 +43,3 @@ with
 
 select *
 from add_user_type
-where user_type_from_google_sheets is not null
