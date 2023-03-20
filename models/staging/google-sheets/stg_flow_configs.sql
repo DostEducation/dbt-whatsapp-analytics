@@ -7,13 +7,12 @@ with source as (
 renamed as (
 
     select
-        day,
-        name,
         sr_no,
-        testing,
-        dry_flows,
+        name,
+        user_for,
+        flow_uuid,
         sequence_number,
-        configuration_status,
+        day,
         _airbyte_ab_id,
         _airbyte_emitted_at,
         _airbyte_normalized_at,
