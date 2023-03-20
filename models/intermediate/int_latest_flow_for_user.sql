@@ -6,6 +6,7 @@ with
             *,
             row_number() over (partition by contact_phone order by message_inserted_at desc) as row_number,
         from messages
+        where message_inserted_at >= current_datetime() - interval 7 day
     ),
 
     get_latest_message_for_contact as (
