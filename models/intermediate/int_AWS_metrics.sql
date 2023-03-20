@@ -1,10 +1,10 @@
 with
     
-    contacts as (select google_sheet_id, name, reporting_to, onboarding_status, user_type from {{ ref('int_contacts') }}),
+    contacts as (select google_sheet_id, name, reporting_to, onboarding_status, user_type_from_google_sheets from {{ ref('int_contacts') }}),
     
-    AWS_contacts as (select * from contacts where user_type = 'AWS'),
+    AWS_contacts as (select * from contacts where user_type_from_google_sheets = 'AWS'),
 
-    AWW_contacts as (select * from contacts where user_type = 'AWW'),
+    AWW_contacts as (select * from contacts where user_type_from_google_sheets = 'AWW'),
 
     join_AWS_to_AWW as (
         select

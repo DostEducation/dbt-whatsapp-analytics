@@ -18,7 +18,7 @@ renamed as (
         _airbyte_emitted_at,
         _airbyte_normalized_at,
         _airbyte_src_contacts_expected_aws_hashid,
-        'AWS' as user_type
+        'AWS' as user_type_from_google_sheets
 
     from source
 
