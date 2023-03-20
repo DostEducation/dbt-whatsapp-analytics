@@ -7,12 +7,12 @@ with source as (
 renamed as (
 
     select
-        link,
         sr_no,
-        node_type,
-        flow_name,
         node_label,
+        question_english,
         intended_outcome,
+        flow_name,
+        flow_uuid,
         final_node_in_flow,
         -- _airbyte_ab_id,
         -- _airbyte_emitted_at,

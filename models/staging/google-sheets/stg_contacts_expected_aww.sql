@@ -20,7 +20,7 @@ renamed as (
         _airbyte_emitted_at,
         _airbyte_normalized_at,
         _airbyte_src_contacts_expected_aww_hashid,
-        'AWW' as user_type,
+        'AWW' as user_type_from_google_sheets,
 
     from source
 

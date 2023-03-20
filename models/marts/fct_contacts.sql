@@ -11,4 +11,4 @@ from
     contacts
     left join AWS_metrics using (google_sheet_id)
     left join latest_flow using (contact_phone)
-where contact_inserted_at >= '2023-03-15'
+-- where contact_inserted_at >= '2023-03-15'
