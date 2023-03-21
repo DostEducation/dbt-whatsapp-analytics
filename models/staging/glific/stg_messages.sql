@@ -31,10 +31,10 @@ with
             id as message_id,
             bq_uuid,
             uuid as message_uuid,
-            body,
-            type,
-            flow,
-            status,
+            body as message_body,
+            type as message_type,
+            flow as message_direction,
+            status as message_status,
             errors,
             sender_phone,
             receiver_phone,
@@ -44,9 +44,9 @@ with
             user_name,
             media_url,
             sent_at,
-            inserted_at,
+            inserted_at as message_inserted_at,
             tags_label,
-            flow_label,
+            lower(flow_label) as node_label,
             flow_name,
             flow_uuid,
             flow_id,
@@ -71,8 +71,3 @@ with
     )
 
 select * from select_and_rename_columns
-where
-    true
-    and contact_phone = '919819352801'
-    and flow = 'inbound'
-order by inserted_at desc

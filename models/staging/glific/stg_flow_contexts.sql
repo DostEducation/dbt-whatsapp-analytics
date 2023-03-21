@@ -14,4 +14,9 @@ select * from add_row_number
 where
     true
     and row_number = 1
-    and flow_uuid = '1576a314-37b7-422b-b609-269e1e547356'
+    and flow_uuid in (
+        'bf2e5555-689f-4708-b9b5-cc6bab8ecf70', -- activation flow
+        '094ed199-1b6c-42a6-80bb-f46617fbb937', -- aws registration 1.0
+        '9c797785-3062-4295-a824-c3237ecbc98a', -- aws registration 1.1
+        'a4900527-f7bc-4dd7-afea-32803280cde1' -- aws registration 1.2
+    )
