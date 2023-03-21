@@ -44,4 +44,4 @@ with
 
 select *
 from select_and_rename_columns
-where contact_inserted_at >= '2023-03-15'
+where contact_inserted_at >= '2023-03-13'
