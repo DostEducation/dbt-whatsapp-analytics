@@ -1,5 +1,5 @@
 with
-    messages as (select * from {{ ref("stg_messages") }}),
+    messages as (select * from {{ ref("fct_messages") }}),
 
     message_count_by_direction_type_status as (
         select
