@@ -43,3 +43,4 @@ with
 
 select *
 from add_user_type
+-- where contact_phone is not null 
