@@ -8,6 +8,10 @@ sources:
     tables:
       - name: contacts
         description: Contact information of the user.
+        loaded_at_field: contact_inserted_at
+        freshness:
+          warn_after: {count: 5, period: day}
+          error_after: {count: 7, period: day}
       - name: contact_histories
         description: Past information of the users that were saved.
       - name: flows
@@ -20,6 +24,10 @@ sources:
         description: information about travel node count.
       - name: messages
         description: Information about the kind of messages that goes out that is from media info to user info to flow info to group info.
+        loaded_at_field: inserted_at
+        freshness:
+          warn_after: {count: 12, period: hour}
+          error_after: {count: 24, period: hour}
       - name: messages_media
         description: Information about the kind of media that goes out in a message.
       - name: message_broadcasts
