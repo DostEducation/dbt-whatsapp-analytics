@@ -1,13 +1,13 @@
 with
-    messages as (select * from {{ ref("stg_messages") }}),
+    messages as (select * from {{ ref("fct_messages") }}),
 
     message_count_by_direction_type_status as (
         select
-            type,
-            status,
+            message_type,
+            message_status,
             count(distinct contact_phone) as count_of_users,
         from messages
-        where status <> 'enqueued'
+        where message_status <> 'enqueued'
         group by 1, 2
         order by 1, 2
     ),
@@ -16,7 +16,7 @@ with
         select *
         from
             message_count_by_direction_type_status pivot (
-                sum(count_of_users) for status in ('sent', 'received')
+                sum(count_of_users) for message_status in ('sent', 'received')
             ) as pivot_results
     ),
 
