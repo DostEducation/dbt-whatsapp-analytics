@@ -7,17 +7,16 @@ with source as (
 renamed as (
 
     select
-        sr_no,
-        name,
+        sr_no as flow_sr_no,
+        name as flow_name,
         user_for,
         flow_uuid,
-        sequence_number,
-        day,
-        _airbyte_ab_id,
-        _airbyte_emitted_at,
-        _airbyte_normalized_at,
-        _airbyte_src_flows_hashid
-
+        sequence_number as flow_sequence_number,
+        day as flow_day,
+        -- _airbyte_ab_id,
+        -- _airbyte_emitted_at,
+        -- _airbyte_normalized_at,
+        -- _airbyte_src_flows_hashid
     from source
 
 )
