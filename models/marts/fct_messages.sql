@@ -1,4 +1,4 @@
 with
-    messages as (select * from {{ ref('stg_messages') }})
+    messages as (select * from {{ ref('int_messages') }})
 
 select * from messages
