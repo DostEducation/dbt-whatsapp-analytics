@@ -7,7 +7,7 @@ with source as (
 renamed as (
 
     select
-        sr_no,
+        sr_no as node_serial_number,
         node_label,
         question_english,
         intended_outcome,
