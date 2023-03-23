@@ -18,3 +18,11 @@ models:
         tests: 
           - not_null
           - unique
+
+  - name: stg_node_configs
+    columns: 
+      - name: node_label
+        description: primary key for this table
+        tests: 
+          - not_null
+          - unique
