@@ -11,7 +11,7 @@ models:
           - unique
   - name: fct_messages
     columns: 
-      - name: message_uuid
+      - name: message_id
         description: primary key for this table
         tests: 
           - not_null
