@@ -1,12 +1,11 @@
 with
-    flows as (select * from {{ ref("stg_flows") }}),
+    flows as (select * from {{ ref("int_flows") }}),
 
     node_configs as (select * from {{ ref('stg_node_configs') }}),
 
     extract_nodes_array as (
         select
-            flow_uuid,
-            flow_name,
+            *,
             json_query_array(flow_config_json, "$.nodes") as nodes,
         from flows
     ),
