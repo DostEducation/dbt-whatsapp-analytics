@@ -9,3 +9,10 @@ models:
         tests: 
           - not_null
           - unique
+  - name: fct_messages
+    columns: 
+      - name: message_id
+        description: primary key for this table
+        tests: 
+          - not_null
+          - unique
