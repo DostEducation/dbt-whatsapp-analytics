@@ -8,7 +8,7 @@ renamed as (
 
     select
         id as google_sheet_id,
-        name,
+        trim(name) as name,
         concat('91', phone) as contact_phone,
         block,
         sector,
