@@ -12,7 +12,7 @@ renamed as (
         user_for,
         flow_uuid,
         objective as flow_objective,
-        outcome as flow_outcome,
+        -- outcome as flow_outcome,
         sequence_number as flow_sequence_number,
         day as flow_day,
         -- _airbyte_ab_id,

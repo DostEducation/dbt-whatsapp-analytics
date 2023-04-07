@@ -14,3 +14,4 @@ sources:
       - name: src_flows
       - name: src_nodes
       - name: src_geographies
+      - name: src_outputs
