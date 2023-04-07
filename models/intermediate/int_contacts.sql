@@ -5,6 +5,8 @@ with
 
     aws_contacts_expected as (select * from {{ ref("stg_contacts_expected_aws") }}),
 
+    geographies as (select * from {{ ref("stg_geographies") }}),
+
     user_type as (
         select * from {{ ref("int_contact_fields") }} where contact_field = 'user type'
     ),
@@ -41,12 +43,28 @@ with
             join_expected_and_actual_contacts.*,
             upper(user_type.contact_field_value) as user_type_from_glific,
             (sector_on_glific.contact_field_value) as sector_from_glific,
-            user_type.contact_field_inserted_at
         from join_expected_and_actual_contacts
             left join user_type using (contact_id)
             left join sector_on_glific using (contact_id)
+    ),
+
+    get_english_names_for_sector as (
+        select
+            add_contact_fields.* except (sector_from_glific),
+            sector_from_glific as sector_from_glific_hindi,
+            geographies.sector as sector_from_glific
+        from
+            add_contact_fields
+            left join geographies on sector_from_glific = sector
+    ),
+
+    consolidate_contact_fields as (
+        select
+            *,
+            if(user_type_from_glific is null, user_type_from_google_sheets, user_type_from_glific) as user_type,
+            if(sector_from_glific is null, sector_from_google_sheets, sector_from_glific) as sector,
+        from get_english_names_for_sector
     )
 
 select *
-from add_contact_fields
--- where contact_phone is not null 
+from consolidate_contact_fields
