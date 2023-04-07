@@ -11,7 +11,7 @@ renamed as (
         trim(name) as name,
         concat('91', phone) as contact_phone,
         block,
-        sector,
+        sector as sector_from_google_sheets,
         district,
         reporting_to,
         _airbyte_ab_id,
