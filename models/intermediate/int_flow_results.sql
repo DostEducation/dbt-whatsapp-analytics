@@ -1,6 +1,8 @@
 with
     flow_results as (select * from {{ ref('stg_flow_results') }}),
 
+    nodes as (select * from {{ ref('int_nodes') }}),
+
     unnest_result_jsons as (
         select
             * except(result_array),
@@ -20,6 +22,15 @@ with
             json_query(result_json, '$.interactive') as result_interactive,
         from
             unnest_result_jsons
+    ),
+
+    add_node_details as (
+        select
+            extract_result_details.*,
+            nodes.* except (flow_uuid)
+        from
+            extract_result_details
+            left join nodes on extract_result_details.result_key =  nodes.node_label
     )
 
-select * from extract_result_details
+select * from add_node_details
