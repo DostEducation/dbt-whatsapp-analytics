@@ -9,7 +9,7 @@ with
 
         select
             id as output_id,
-            outputs,
+            outputs as output_name,
             user_for,
             -- _airbyte_ab_id,
             -- _airbyte_emitted_at,
