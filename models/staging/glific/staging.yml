@@ -80,6 +80,9 @@ models:
     columns: 
       - name: flow_id
         description: Primary key for table stg_flows
+        tests:
+          - unique
+          - not_null
       - name: flow_uuid
         description: Unique UUID generated for each row (allows us to delete duplicates)
       - name: flow_name
@@ -213,6 +216,9 @@ models:
     columns:
       - name: id				
         description: Flow Context ID; key	
+        tests:
+          - unique
+          - not_null
       - name: bq_uuid	
         description: Unique UUID for the row (allows us to delete duplicates)	
       - name: bq_inserted_at			

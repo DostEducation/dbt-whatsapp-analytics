@@ -65,9 +65,48 @@ models:
 
   - name: int_node_types_configured
 
-  - name: int_extract_flow_results
-    tests:
-    - dbt_utils.unique_combination_of_columns:
-        combination_of_columns:
-          - flow_result_id
-          - result_key
+  # - name: int_extract_flow_results
+  #   tests:
+  #   - dbt_utils.unique_combination_of_columns:
+  #       combination_of_columns:
+  #         - flow_result_id
+  #         - result_key
+  - name: int_inbound_message_metrics
+    columns:
+      - name: contact_phone
+        description: unique key of this table (user's phone number)
+        tests: 
+          - not_null
+          - unique
+  
+  - name: int_messages
+    columns:
+      - name: message_id
+        description: Unique key of this table
+        tests: 
+          - not_null
+          - unique
+  
+  - name: int_node_types_configured
+    columns: 
+      - name: node_type_n1
+        description: Unique identification of the table
+        tests:
+          - not_null
+          - unique
+
+  - name: int_flow_results
+    columns:
+      - name: flow_result_id
+        description: Primary key of the table
+        tests: 
+          - not_null
+          - unique
+
+  - name: int_flows
+    columns: 
+      - name: flow_id 
+        description: Primary key of the table
+        tests:
+         - not_null
+         - unique

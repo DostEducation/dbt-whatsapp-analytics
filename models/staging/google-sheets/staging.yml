@@ -26,3 +26,40 @@ models:
         tests: 
           - not_null
           - unique
+  - name: stg_flow_configs
+    columns:
+      - name: flow_sr_no
+        description: Serial number of the flow
+        tests: 
+          - not_null
+          - unique
+  - name: stg_outputs
+    columns: 
+      - name: output_id
+        description: Primary Key of the table
+        tests:
+          - not_null
+          - unique
+  - name: stg_collections
+    columns:
+      - name: id
+        description: primary key of the table
+        tests: 
+          - not_null
+          - unique
+  - name: stg_configured_responses
+    columns:
+      - name: configured_response_id
+        description: Primary key of the table
+        tests: 
+          - not_null
+          - unique
+  - name: stg_geographies
+    columns:
+      - name: sr_no
+        description: Primary Key of the table
+        tests: 
+          - not_null
+          - unique
+   
+
