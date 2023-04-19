@@ -212,54 +212,54 @@ models:
   
 
     - name: stg_flow_contexts
-    description: Gives the context of the flow whether the flow was killed, information about content, user etc.
-    columns:
-      - name: id				
-        description: Flow Context ID; key	
-        tests:
-          - unique
-          - not_null
-      - name: bq_uuid	
-        description: Unique UUID for the row (allows us to delete duplicates)	
-      - name: bq_inserted_at			
-        description: Time when the record entry was made on bigquery	
-      - name: node_uuid	
-        description: Name of the current node uuid flow	
-      - name: flow_uuid	
-        description: Unique ID generated for each flow	
-      - name: flow_id	
-        description: Unique ID generated for each flow in the glific db	
-      - name: contact_id	
-        description: contact id references to the contact table	
-      - name: contact_phone	
-        description: contact phone references to the contact table	
-      - name: results	
-        description: local result of a particular flow context	
-      - name: recent_inbound	
-        description: Few latest messages received by the contact	
-      - name: recent_outbound	
-        description: Few latest messages sent to the contact	
-      - name: status	
-        description: Status of the flow context is it for draft or published only	
-      - name: parent_id		
-        description: Parent flow context id references to the flow context table	
-      - name: flow_broadcast_id		
-        description: flow broadcast id references to the flow broadcast table, this is an old one. We will remove it in the future	
-      - name: is_background_flow		
-        description: Check to see if the flow context is for a background or foreground flow	
-      - name: is_killed		
-        description: Check in case we killed the flow for a contact. Not when contact finished the flow	
-      - name: is_await_result		
-        description: Check for a flow results node	
-      - name: wakeup_at			
-        description: Check if the flow is waiting for a action or time to resume.	
-      - name: completed_at			
-        description: Time when the flow was killed or completed	
-      - name: inserted_at			
-        description: Time when the flow was first created	
-      - name: updated_at			
-        description: Time when the flow was last updated	
-      - name: profile_id		
-        description: ID of the profile table reference to the profile table	
-      - name: message_broadcast_id		
-        description: message broadcast id references to the flow broadcast table	
+      description: Gives the context of the flow whether the flow was killed, information about content, user etc.
+      columns:
+        - name: flow_context_id				
+          description: Flow Context ID; key	
+          tests:
+            - unique
+            - not_null
+        - name: bq_uuid	
+          description: Unique UUID for the row (allows us to delete duplicates)	
+        - name: bq_inserted_at			
+          description: Time when the record entry was made on bigquery	
+        - name: node_uuid	
+          description: Name of the current node uuid flow	
+        - name: flow_uuid	
+          description: Unique ID generated for each flow	
+        - name: flow_id	
+          description: Unique ID generated for each flow in the glific db	
+        - name: contact_id	
+          description: contact id references to the contact table	
+        - name: contact_phone	
+          description: contact phone references to the contact table	
+        - name: results	
+          description: local result of a particular flow context	
+        - name: recent_inbound	
+          description: Few latest messages received by the contact	
+        - name: recent_outbound	
+          description: Few latest messages sent to the contact	
+        - name: status	
+          description: Status of the flow context is it for draft or published only	
+        - name: parent_id		
+          description: Parent flow context id references to the flow context table	
+        - name: flow_broadcast_id		
+          description: flow broadcast id references to the flow broadcast table, this is an old one. We will remove it in the future	
+        - name: is_background_flow		
+          description: Check to see if the flow context is for a background or foreground flow	
+        - name: is_killed		
+          description: Check in case we killed the flow for a contact. Not when contact finished the flow	
+        - name: is_await_result		
+          description: Check for a flow results node	
+        - name: wakeup_at			
+          description: Check if the flow is waiting for a action or time to resume.	
+        - name: completed_at			
+          description: Time when the flow was killed or completed	
+        - name: inserted_at			
+          description: Time when the flow was first created	
+        - name: updated_at			
+          description: Time when the flow was last updated	
+        - name: profile_id		
+          description: ID of the profile table reference to the profile table	
+        - name: message_broadcast_id		
+          description: message broadcast id references to the flow broadcast table	
