@@ -8,15 +8,42 @@ with
                 partition by flow_uuid, contact_phone order by updated_at desc
             ) as row_number
         from flow_contexts
+    ),
+
+    filter_latest_row as (
+        select * from add_row_number
+        where
+            true
+            and row_number = 1
+    ),
+
+    rename_columns as (
+        select
+            id as flow_context_id, 
+            bq_uuid, 
+            bq_inserted_at, 
+            node_uuid, 
+            flow_uuid, 
+            flow_id, 
+            contact_id, 
+            contact_phone, 
+            results, 
+            recent_inbound, 
+            recent_outbound, 
+            status, 
+            parent_id, 
+            flow_broadcast_id, 
+            is_background_flow, 
+            is_killed, 
+            is_await_result, 
+            wakeup_at, 
+            -- completed_at, 
+            -- inserted_at, 
+            -- updated_at, 
+            profile_id, 
+            message_broadcast_id, 
+            reason
+        from filter_latest_row
     )
 
-select * from add_row_number
-where
-    true
-    and row_number = 1
-    and flow_uuid in (
-        'bf2e5555-689f-4708-b9b5-cc6bab8ecf70', -- activation flow
-        '094ed199-1b6c-42a6-80bb-f46617fbb937', -- aws registration 1.0
-        '9c797785-3062-4295-a824-c3237ecbc98a', -- aws registration 1.1
-        'a4900527-f7bc-4dd7-afea-32803280cde1' -- aws registration 1.2
-    )
+select * from rename_columns
