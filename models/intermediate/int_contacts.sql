@@ -1,26 +1,14 @@
 with
     glific_contacts as (select * from {{ ref("stg_contacts") }}),
-
     aww_contacts_expected as (select * from {{ ref("stg_contacts_expected_aww") }}),
-
     aws_contacts_expected as (select * from {{ ref("stg_contacts_expected_aws") }}),
-
     geographies as (select * from {{ ref("stg_geographies") }}),
-
-    user_type as (
-        select * from {{ ref("int_contact_fields") }} where contact_field = 'user type'
-    ),
-
-    sector_on_glific as (
-        select * from {{ ref("int_contact_fields") }} where contact_field = 'sector'
-    ),
+    contact_fields as (select * from {{ ref('int_contact_fields') }}),
 
     append_aws_and_aww_contacts_expected as (
-        select *
-        from aws_contacts_expected
+        select * from aws_contacts_expected
         union all
-        select *
-        from aww_contacts_expected
+        select * from aww_contacts_expected
     ),
 
     join_expected_and_actual_contacts as (
@@ -41,11 +29,11 @@ with
     add_contact_fields as (
         select
             join_expected_and_actual_contacts.*,
-            upper(user_type.contact_field_value) as user_type_from_glific,
-            (sector_on_glific.contact_field_value) as sector_from_glific,
+            contact_fields.* except (contact_id, contact_phone, user_type, district, block, sector),
+            upper(user_type) as user_type_from_glific,
+            (sector) as sector_from_glific,
         from join_expected_and_actual_contacts
-            left join user_type using (contact_id)
-            left join sector_on_glific using (contact_id)
+            left join contact_fields using (contact_id)
     ),
 
     get_english_names_for_sector as (
