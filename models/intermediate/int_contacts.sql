@@ -1,3 +1,10 @@
+{{
+    config(
+        materialized='table'
+    )
+}}
+
+
 with
     glific_contacts as (select * from {{ ref("stg_contacts") }}),
     aww_contacts_expected as (select * from {{ ref("stg_contacts_expected_aww") }}),
