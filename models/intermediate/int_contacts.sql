@@ -69,3 +69,4 @@ select
     * except(row_number)
 from filtering_duplicates
 where row_number = 1
+{# and contact_phone in  ('919639195568', '918859877173','916360485088','918958144218') #}
