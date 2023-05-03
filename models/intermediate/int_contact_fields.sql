@@ -15,14 +15,41 @@ with
     add_row_number as (
         select
             *,
-            row_number() over (partition by contact_phone, contact_field order by contact_field_inserted_at desc) as row_number
+            row_number() over (
+                partition by contact_phone, contact_field
+                order by contact_field_inserted_at desc
+            ) as row_number
         from unnest_contact_fields
     ),
 
-    select_latest_inserted_row as (
-        select * from add_row_number where row_number = 1
+    select_latest_inserted_row as (select * from add_row_number where row_number = 1),
+
+    contact_ids as (select contact_id, contact_phone from select_latest_inserted_row group by 1, 2),
+
+    user_type as (select contact_id, contact_field_value as user_type from select_latest_inserted_row where contact_field = 'user type'),
+    district as (select contact_id, contact_field_value as district from select_latest_inserted_row where contact_field = 'district'),
+    block as (select contact_id, contact_field_value as block from select_latest_inserted_row where contact_field = 'block'),
+    sector as (select contact_id, contact_field_value as sector from select_latest_inserted_row where contact_field = 'sector'),
+    last_flow as (select contact_id, contact_field_value as last_flow from select_latest_inserted_row where contact_field = 'last_flow'),
+    name_of_awc as (select contact_id, contact_field_value as name_of_awc from select_latest_inserted_row where contact_field = 'name of awc'),
+    number_of_awc as (select contact_id, contact_field_value as number_of_awc from select_latest_inserted_row where contact_field = 'no.of awc'),
+    number_0_to_3_kids as (select contact_id, contact_field_value as number_0_to_3_kids from select_latest_inserted_row where contact_field = 'number of 0-3 kids'),
+    number_3_to_6_kids as (select contact_id, contact_field_value as number_3_to_6_kids from select_latest_inserted_row where contact_field = 'number of 3-6 kids'),
+
+    join_contact_fields_with_id as (
+        select *
+        from
+            contact_ids
+            left join user_type using (contact_id)
+            left join district using (contact_id)
+            left join block using (contact_id)
+            left join sector using (contact_id)
+            left join last_flow using (contact_id)
+            left join name_of_awc using (contact_id)
+            left join number_of_awc using (contact_id)
+            left join number_0_to_3_kids using (contact_id)
+            left join number_3_to_6_kids using (contact_id)
     )
 
 select *
-from select_latest_inserted_row
-
+from join_contact_fields_with_id
