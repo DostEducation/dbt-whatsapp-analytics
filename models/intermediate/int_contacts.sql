@@ -59,7 +59,13 @@ with
             if(user_type_from_glific is null, user_type_from_google_sheets, user_type_from_glific) as user_type,
             if(sector_from_glific is null, sector_from_google_sheets, sector_from_glific) as sector,
         from get_english_names_for_sector
+    ),
+    filtering_duplicates as (
+        select *,
+            row_number() over (partition by contact_phone) as row_number
+        from consolidate_contact_fields
     )
-
-select *
-from consolidate_contact_fields
+select
+    * except(row_number)
+from filtering_duplicates
+where row_number = 1
