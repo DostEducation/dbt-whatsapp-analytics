@@ -63,8 +63,6 @@ models:
           - flow_uuid
           - node_uuid
 
-  - name: int_node_types_configured
-
   # - name: int_extract_flow_results
   #   tests:
   #   - dbt_utils.unique_combination_of_columns:
