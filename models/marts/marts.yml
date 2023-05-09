@@ -16,3 +16,19 @@ models:
         tests: 
           - not_null
           - unique
+  
+  - name: fct_outputs
+    columns: 
+      - name: output_id
+        description: primary key for this table
+        tests: 
+          - not_null
+          - unique
+  
+  - name: fct_nodes
+    columns: 
+      - name: node_label
+        description: primary key for this table
+        tests: 
+          - not_null
+          - unique
