@@ -75,16 +75,17 @@ models:
         description: Label of all the groups that the contact belongs to
       - name: contact_bq_inserted_at
         description: Time when the record entry was made on bigquery
+
   - name: stg_flows
     description: This gives you information about the flow that goes out to the users like flow status, flow name etc.
     columns: 
       - name: flow_id
         description: Primary key for table stg_flows
+      - name: flow_uuid
+        description: Unique UUID generated for each row (allows us to delete duplicates)
         tests:
           - unique
           - not_null
-      - name: flow_uuid
-        description: Unique UUID generated for each row (allows us to delete duplicates)
       - name: flow_name
         description: Name of the created flow
       - name: flow_status
