@@ -60,13 +60,19 @@ with
             if(sector_from_glific is null, sector_from_google_sheets, sector_from_glific) as sector,
         from get_english_names_for_sector
     ),
-    filtering_duplicates as (
-        select *,
-            row_number() over (partition by contact_phone) as row_number
+
+    add_row_number as (
+        select
+            *,
+            row_number() over (partition by contact_phone) as row_count
         from consolidate_contact_fields
+    ),
+
+    remove_duplicate_phone_numbers as  (
+        select
+            * except(row_count)
+        from add_row_number
+        where row_count = 1
     )
-select
-    * except(row_number)
-from filtering_duplicates
-where row_number = 1
-{# and contact_phone in  ('919639195568', '918859877173','916360485088','918958144218') #}
+
+select * from remove_duplicate_phone_numbers
