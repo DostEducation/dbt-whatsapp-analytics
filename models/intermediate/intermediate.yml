@@ -47,6 +47,11 @@ models:
         combination_of_columns:
           - flow_uuid
           - node_uuid
+    columns: 
+      - name: nodel_label
+        tests: 
+          - not_null
+          - unique
 
   - name: int_node_counts
     columns: 

@@ -37,8 +37,23 @@ with
             node_configs.* except (node_label, flow_name, flow_uuid),
         from unnest_nodes
             left join node_configs using (node_label)
-    )
+        where unnest_nodes.node_label is not null
+    ),
+
+    add_row_number as (
+        select
+            *,
+            row_number() over (partition by node_label) as row_number
+        from add_node_config_info
+    ),
+
+    remove_duplicates as  (
+        select
+            * except(row_number)
+        from add_row_number
+        where row_number = 1
+    )    
 
 select *
-from add_node_config_info
+from remove_duplicates
 
