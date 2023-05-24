@@ -35,32 +35,31 @@ with
             *,
             `cryptic-gate-211900.918800625442.extractKeys`(results) as result_array,
         from rename_columns
+    ),
+
+    unnest_result_jsons as (
+        select
+            *,
+        from
+            extract_result_array,
+            unnest(result_array) as result_json
+    ),
+
+    extract_result_details as (
+        select
+            *,
+            json_value(result_json, '$.result_key') as result_key,
+            json_value(result_json, '$.category') as result_category,
+            json_value(result_json, '$.input') as result_input,
+            json_value(result_json, '$.inserted_at') as result_inserted_at,
+            json_value(result_json, '$.intent') as result_intent,
+            json_query(result_json, '$.interactive') as result_interactive,
+        from
+            unnest_result_jsons
     )
-
-    --- move below CTEs to intermediate file
-    -- unnest_result_jsons as (
-    --     select
-    --         *,
-    --     from
-    --         extract_result_array,
-    --         unnest(result_array) as result_json
-    -- ),
-
-    -- extract_result_details as (
-    --     select
-    --         *,
-    --         json_value(result_json, '$.result_key') as result_key,
-    --         json_value(result_json, '$.category') as result_category,
-    --         json_value(result_json, '$.input') as result_input,
-    --         json_value(result_json, '$.inserted_at') as result_inserted_at,
-    --         json_value(result_json, '$.intent') as result_intent,
-    --         json_query(result_json, '$.interactive') as result_interactive,
-    --     from
-    --         unnest_result_jsons
-    -- )
 
 select
     *
-from extract_result_array
+from extract_result_details
 where
     flow_result_inserted_at >= '2023-03-13'

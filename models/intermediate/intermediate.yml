@@ -2,6 +2,14 @@ version: 2
 
 models:
   
+  - name: int_contacts
+    columns: 
+      - name: contact_phone
+        description: primary key for this table
+        tests: 
+          - not_null
+          - unique
+
   - name: int_contact_fields
     tests:
     - dbt_utils.unique_combination_of_columns:
@@ -9,9 +17,9 @@ models:
           - contact_phone
           - contact_field
 
-  - name: int_contacts
+  - name: int_contact_groups
     columns: 
-      - name: contact_phone
+      - name: contact_id
         description: primary key for this table
         tests: 
           - not_null
@@ -32,11 +40,15 @@ models:
         tests: 
           - not_null
           - unique
-
-  - name: int_contact_groups
+  
+  - name: int_nodes
+    tests:
+    - dbt_utils.unique_combination_of_columns:
+        combination_of_columns:
+          - flow_uuid
+          - node_uuid
     columns: 
-      - name: contact_id
-        description: primary key for this table
+      - name: nodel_label
         tests: 
           - not_null
           - unique
@@ -55,13 +67,6 @@ models:
         tests: 
           - not_null
           - unique
-  
-  - name: int_nodes
-    tests:
-    - dbt_utils.unique_combination_of_columns:
-        combination_of_columns:
-          - flow_uuid
-          - node_uuid
 
   # - name: int_extract_flow_results
   #   tests:
@@ -69,6 +74,7 @@ models:
   #       combination_of_columns:
   #         - flow_result_id
   #         - result_key
+
   - name: int_inbound_message_metrics
     columns:
       - name: contact_phone
@@ -93,6 +99,14 @@ models:
           - not_null
           - unique
 
+  - name: int_flows
+    columns: 
+      - name: flow_uuid
+        description: Primary key of the table
+        tests:
+         - not_null
+         - unique
+
   - name: int_flow_results
     columns:
       - name: flow_result_id
@@ -101,10 +115,3 @@ models:
           - not_null
           - unique
 
-  - name: int_flows
-    columns: 
-      - name: flow_id 
-        description: Primary key of the table
-        tests:
-         - not_null
-         - unique

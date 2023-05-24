@@ -33,12 +33,13 @@ with
 
     add_node_config_info as (
         select
-            unnest_nodes.*,
-            node_configs.* except (node_label, flow_name, flow_uuid),
+            *
         from unnest_nodes
             left join node_configs using (node_label)
+        where
+            unnest_nodes.node_label is not null
     )
 
-select *
-from add_node_config_info
+select * from add_node_config_info
+
 
