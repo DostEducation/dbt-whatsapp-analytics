@@ -3,9 +3,10 @@ with
 
     contacts as (select * from {{ ref('fct_contacts') }}),
 
-    cross_join as (
+    contact_output_combinations as (
         select
             output_id,
+            output_name,
             contact_phone,
             user_type,
             user_for
@@ -18,24 +19,43 @@ with
 
     flow_results as (select * from {{ ref('int_flow_results') }}),
 
-    get_desired_response as (
+    get_output_count as (
         select
             output_id,
             contact_phone,
-            desired_response,
-            -- count(if(desired_response = 'Yes', contact_phone, null)) as output_count
+            -- desired_response,
+            count(if(desired_response = 'Yes', contact_phone, null)) as output_count
         from
             flow_results
         where
             output_id is not null
             and contact_phone is not null
-            -- and desired_response is not null 
-        group by 1, 2, 3
+            and desired_response is not null 
+        group by 1, 2
+    ),
+
+    output_achievement as (
+        select
+            *,
+            if(output_count >= 1, 'Yes', null) as output_demonstrated
+        from
+            contact_output_combinations
+            left join get_output_count using (output_id, contact_phone) 
+        -- where output_count is null
+    ),
+
+    demography_fields as (
+        select
+            output_achievement.*,
+            contacts.* except(contact_phone, user_type)
+        from
+            output_achievement
+            left join contacts using (contact_phone)
     )
 
-
-
-select
-    *
-from
-    flow_results
+{{ dbt_utils.deduplicate(
+    relation='demography_fields',
+    partition_by='output_id, contact_phone',
+    order_by='_airbyte_emitted_at desc',
+   )
+}}

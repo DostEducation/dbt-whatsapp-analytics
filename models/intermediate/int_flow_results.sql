@@ -46,4 +46,12 @@ with
             left join contacts using (contact_phone)
     )
 
-select * from add_user_type
+{{ dbt_utils.deduplicate(
+    relation='add_user_type',
+    partition_by='flow_result_id',
+    order_by='flow_result_inserted_at desc',
+   )
+}}
+
+
+
