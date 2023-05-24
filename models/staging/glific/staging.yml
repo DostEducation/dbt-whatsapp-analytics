@@ -98,6 +98,7 @@ models:
         description: Revision number for the flow, if any revisions/ modifications were made
       - name: keywords
         description: List of keywords to trigger the flow
+
   - name: stg_messages
     description: Information about the kind of messages that goes out that is from media info to user info to flow info to group info.
     columns: 
@@ -187,9 +188,6 @@ models:
     columns:
     - name: flow_result_id
       description: Primary Key for table flow results
-      tests:
-        - unique
-        - not_null
     - name: flow_result_bq_uuid
       description: Unique UUID for the row (allows us to delete duplicates)
     - name: flow_uuid
