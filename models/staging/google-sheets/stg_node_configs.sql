@@ -11,6 +11,7 @@ with
             -- flow_name,
             -- __REF_output,
             -- outcome_type,
+            response_type_expected,
             question_english,
             final_node_in_flow,
             -- _airbyte_ab_id,
