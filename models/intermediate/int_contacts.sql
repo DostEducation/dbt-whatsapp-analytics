@@ -46,7 +46,9 @@ with
 
     get_english_names_for_sector as (
         select
-            add_contact_fields.* except (sector_from_glific),
+            add_contact_fields.* except (sector_from_glific,block_from_gliffic),
+            block_from_gliffic as block_from_gliffic_hindi,
+            geographies.block as block_from_gliffic,
             sector_from_glific as sector_from_glific_hindi,
             geographies.sector as sector_from_glific
         from
