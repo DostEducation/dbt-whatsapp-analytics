@@ -38,6 +38,7 @@ with
             join_expected_and_actual_contacts.*,
             contact_fields.* except (contact_id, contact_phone, user_type, district, block, sector),
             upper(user_type) as user_type_from_glific,
+            contact_fields.block as block_from_gliffic,
             (sector) as sector_from_glific,
         from join_expected_and_actual_contacts
             left join contact_fields using (contact_id)
@@ -45,7 +46,9 @@ with
 
     get_english_names_for_sector as (
         select
-            add_contact_fields.* except (sector_from_glific),
+            add_contact_fields.* except (sector_from_glific,block_from_gliffic),
+            block_from_gliffic as block_from_gliffic_hindi,
+            geographies.block as block_from_gliffic,
             sector_from_glific as sector_from_glific_hindi,
             geographies.sector as sector_from_glific
         from
