@@ -1,6 +1,5 @@
 with
-    outputs as (select * from {{ ref('stg_outputs') }} ),
-
+    outputs as (select * from {{ ref('stg_outputs') }}),
     contacts as (select * from {{ ref('fct_contacts') }}),
 
     contact_output_combinations as (
