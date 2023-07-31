@@ -1,4 +1,4 @@
 with
     messages as (select * from {{ ref('int_messages') }})
 
-select * from messages
+select *except(flow_config_json) from messages
