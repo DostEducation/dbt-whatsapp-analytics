@@ -36,6 +36,7 @@ with
     number_0_to_3_kids as (select contact_id, contact_field_value as number_0_to_3_kids from select_latest_inserted_row where contact_field = 'number of 0-3 kids'),
     number_3_to_6_kids as (select contact_id, contact_field_value as number_3_to_6_kids from select_latest_inserted_row where contact_field = 'number of 3-6 kids'),
     flow_execution_date as (select contact_id, contact_field_value as flow_execution_date from select_latest_inserted_row where contact_field = 'flow_execution_date'),
+    user_department as (select contact_id, contact_field_value as user_department from select_latest_inserted_row where contact_field = 'user department'),
 
     join_contact_fields_with_id as (
         select *
@@ -51,6 +52,7 @@ with
             left join number_0_to_3_kids using (contact_id)
             left join number_3_to_6_kids using (contact_id)
             left join flow_execution_date using (contact_id)
+            left join user_department using (contact_id)
     )
 
 select *
