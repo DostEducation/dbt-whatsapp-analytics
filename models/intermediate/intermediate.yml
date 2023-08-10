@@ -11,11 +11,12 @@ models:
           - unique
 
   - name: int_contact_fields
-    tests:
-    - dbt_utils.unique_combination_of_columns:
-        combination_of_columns:
-          - contact_phone
-          - contact_field
+    columns:
+      - name: contact_phone
+        tests:
+          - not_null
+          - unique
+      
 
   - name: int_contact_groups
     columns: 
