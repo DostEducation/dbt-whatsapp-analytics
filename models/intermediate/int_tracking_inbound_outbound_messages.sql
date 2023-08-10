@@ -2,7 +2,6 @@ with messages as (select * from {{ref('int_messages')}}),
 messages_sent_by_user as (
     select
         message_id,
-        contact_name,
         contact_phone,
         message_direction,
         message_body,
@@ -24,7 +23,6 @@ filtering_out_row_number_for_user as (
 messages_sent_by_dost as (
     select
          message_id,
-        contact_name,
         contact_phone,
         message_direction,
         message_body,
