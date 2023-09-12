@@ -37,6 +37,10 @@ with
     number_3_to_6_kids as (select contact_id, contact_field_value as number_3_to_6_kids from select_latest_inserted_row where contact_field = 'number of 3-6 kids'),
     flow_execution_date as (select contact_id, contact_field_value as flow_execution_date from select_latest_inserted_row where contact_field = 'flow_execution_date'),
     user_department as (select contact_id, contact_field_value as user_department from select_latest_inserted_row where contact_field = 'user department'),
+    programme as (select contact_id, contact_field_value as programme from select_latest_inserted_row where contact_field = 'dd_programme'),
+    sign_up_status as (select contact_id, contact_field_value as sign_up_status from select_latest_inserted_row where contact_field = 'DD_Sign-Up-Status'),
+    parent_type as (select contact_id, contact_field_value as parent_type from select_latest_inserted_row where contact_field = 'parent_type'),
+    city as (select contact_id, contact_field_value as city from select_latest_inserted_row where contact_field = 'dd_city'),
 
     join_contact_fields_with_id as (
         select *
@@ -53,6 +57,10 @@ with
             left join number_3_to_6_kids using (contact_id)
             left join flow_execution_date using (contact_id)
             left join user_department using (contact_id)
+            left join programme using (contact_id)
+            left join sign_up_status using (contact_id)
+            left join parent_type using (contact_id)
+            left join city using (contact_id)
     )
 
 select *
