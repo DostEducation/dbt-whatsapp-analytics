@@ -64,5 +64,5 @@ with
     )
 
 select *
-from unnest_contact_fields
+from join_contact_fields_with_id
 
