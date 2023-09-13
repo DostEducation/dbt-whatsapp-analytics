@@ -11,6 +11,7 @@ with
     aws_contacts_expected as (select * from {{ ref("stg_contacts_expected_aws") }}),
     geographies as (select * from {{ ref("stg_geographies") }}),
     contact_fields as (select * from {{ ref('int_contact_fields') }}),
+    contact_group as (select * from {{ ref('int_contact_groups') }}),
 
     append_aws_and_aww_contacts_expected as (
         select * from aws_contacts_expected
@@ -76,6 +77,17 @@ with
             * except(row_count)
         from add_row_number
         where row_count = 1
+    ),
+
+    add_contact_group as (
+        select
+            remove_duplicate_phone_numbers.*,
+            open_ended_experience,
+            semi_guided_experience,
+            guided_experience,
+            experience_type
+        from remove_duplicate_phone_numbers
+        left join contact_group using (contact_phone)
     )
 
-select * from remove_duplicate_phone_numbers
+select * from add_contact_group
