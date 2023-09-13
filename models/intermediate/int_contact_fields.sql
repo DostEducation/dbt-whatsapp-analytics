@@ -38,7 +38,7 @@ with
     flow_execution_date as (select contact_id, contact_field_value as flow_execution_date from select_latest_inserted_row where contact_field = 'flow_execution_date'),
     user_department as (select contact_id, contact_field_value as user_department from select_latest_inserted_row where contact_field = 'user department'),
     programme as (select contact_id, contact_field_value as programme from select_latest_inserted_row where contact_field = 'dd_programme'),
-    sign_up_status as (select contact_id, contact_field_value as sign_up_status from select_latest_inserted_row where contact_field = 'DD_Sign-Up-Status'),
+    sign_up_status as (select contact_id, contact_field_value as sign_up_status from select_latest_inserted_row where contact_field = 'dd_sign-up-status'),
     parent_type as (select contact_id, contact_field_value as parent_type from select_latest_inserted_row where contact_field = 'parent_type'),
     city as (select contact_id, contact_field_value as city from select_latest_inserted_row where contact_field = 'dd_city'),
 
@@ -64,4 +64,5 @@ with
     )
 
 select *
-from join_contact_fields_with_id
+from unnest_contact_fields
+
