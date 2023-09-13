@@ -1,12 +1,12 @@
 with
     messages as (select * from {{ ref('int_messages') }}),
 
-    contact_field as (select * from {{ ref('int_contact_fields') }}),
+    contacts as (select * from {{ ref('int_contacts') }}),
 
-    joining_contact_message as (
-        select messages.*except(flow_config_json),programme, sign_up_status,parent_type,city from messages
-        left join contact_field using (contact_phone)
+    joining_contacts_messages as (
+        select messages.*except(flow_config_json),programme, sign_up_status,parent_type,city, open_ended_experience,semi_guided_experience,guided_experience from messages
+        left join contacts using (contact_phone)
     )
 select
     *
-from joining_contact_message
+from joining_contacts_messages
