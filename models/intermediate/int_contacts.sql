@@ -78,14 +78,16 @@ with
         from add_row_number
         where row_count = 1
     ),
-    adding_contact_group as (
+
+    add_contact_group as (
         select
             remove_duplicate_phone_numbers.*,
             open_ended_experience,
             semi_guided_experience,
-            guided_experience
+            guided_experience,
+            experience_type
         from remove_duplicate_phone_numbers
         left join contact_group using (contact_phone)
     )
 
-select * from adding_contact_group
+select * from add_contact_group
