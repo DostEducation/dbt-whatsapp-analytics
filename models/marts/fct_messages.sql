@@ -12,7 +12,8 @@ with
             open_ended_experience,
             semi_guided_experience,
             guided_experience,
-            experience_type
+            experience_type,
+            contact_optin_method
         from messages
         left join contacts using (contact_phone)
     )
