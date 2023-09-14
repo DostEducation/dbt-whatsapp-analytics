@@ -40,6 +40,6 @@ with
             unnest_nodes.node_label is not null
     )
 
-select * from add_node_config_info
+select *except(flow_config_json) from add_node_config_info
 
 
