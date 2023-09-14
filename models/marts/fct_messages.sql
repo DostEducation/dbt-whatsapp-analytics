@@ -4,7 +4,7 @@ with
 
     join_tables as (
         select
-            messages.* except(flow_config_json),
+            messages.*,
             programme,
             sign_up_status,
             parent_type,
