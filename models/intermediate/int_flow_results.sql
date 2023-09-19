@@ -73,13 +73,5 @@ with
         from add_output_label
         left join contacts using (contact_phone)
     )
-
-    {# add_row_number as (
-        select
-            *,
-            row_number() over(partition by contact_phone, node_label order by inserted_at desc) as row_number
-        from add_user_type
-        where inserted_at >= '2023-09-01' and start_node_in_flow = 'Yes'
-    ) #}
-
+    
 select * from add_user_type
