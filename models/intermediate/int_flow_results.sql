@@ -7,7 +7,7 @@ with
 
     outputs as (select * from {{ ref("stg_outputs") }}),
 
-    contacts as (select * from {{ ref("fct_contacts") }}),
+    {# contacts as (select * from {{ ref("fct_contacts") }}), #}
 
     add_node_details as (
         select flow_results.*, nodes.* except (flow_uuid)
@@ -66,12 +66,12 @@ with
         select questions_accepting_any_response.*, outputs.output_name
         from questions_accepting_any_response
         left join outputs using (output_id)
-    ),
-
+    )
+{# 
     add_user_type as (
         select add_output_label.*, contacts.user_type
         from add_output_label
         left join contacts using (contact_phone)
-    )
+    ) #}
     
-select * from add_user_type
+select * from questions_accepting_any_response

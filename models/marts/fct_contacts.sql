@@ -9,7 +9,9 @@ with
 
     latest_flow_before_ten_days as (select * from {{ ref('int_message_not_received_in_ten_days') }}),
 
-    tracking_inbound_outbound_messages as (select * from {{ ref('int_tracking_inbound_outbound_messages') }})
+    tracking_inbound_outbound_messages as (select * from {{ ref('int_tracking_inbound_outbound_messages') }}),
+
+    contact_flow_result_messages as (select * from {{ ref('int_contact_flow_result_messages') }})
 
 select
     *
@@ -20,3 +22,4 @@ from
     left join received_message_metrics using (contact_phone)
     left join latest_flow_before_ten_days using (contact_phone)
     left join tracking_inbound_outbound_messages using (contact_phone)
+    left join contact_flow_result_messages using (contact_phone)
