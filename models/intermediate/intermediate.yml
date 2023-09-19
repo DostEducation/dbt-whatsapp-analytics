@@ -117,13 +117,3 @@ models:
         tests: 
           - not_null
           - unique
-  
-  - name: int_flow_flow_result_messages
-    columns: 
-      - name: flow_uuid
-        description: Primary key of the table
-        tests:
-         - not_null
-         - unique
-
-

@@ -44,7 +44,7 @@ with flow_results as (select * from {{ ref('int_flow_results') }}),
     add_no_of_start_message_received as (
         select
             flows.flow_name,
-            count(if(start_node_in_flow='Yes' and message_direction='outbound', contact_phone,null)) as no_start_message_received
+            count(if(start_node_in_flow='Yes', contact_phone,null)) as no_start_message_received
         from flows
         left join select_latest_response_for_messages using (flow_name)
         group by 1
@@ -59,7 +59,7 @@ with flow_results as (select * from {{ ref('int_flow_results') }}),
         left join add_no_of_start_node using (flow_name)
         left join add_no_of_start_message_received using (flow_name)
     )
+    
 select
     *
 from join_start_message_responded_receieved
-{# where no_of_start_flow_responded < no_of_final_flow_responded #}

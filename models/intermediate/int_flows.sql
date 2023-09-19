@@ -20,3 +20,4 @@ with
     )
 
 select * from add_flow_status
+where flow_id is not null
