@@ -5,7 +5,7 @@ with flow_results as (select * from {{ ref('int_flow_results') }}),
     add_row_number_for_flow_results as (
         select
             *,
-            row_number() over(partition by contact_phone, node_label order by inserted_at desc) as row_number
+            row_number() over(partition by contact_phone, flow_name order by inserted_at desc) as row_number
         from flow_results
         where inserted_at >= '2023-09-01'
     ),
@@ -35,7 +35,8 @@ with flow_results as (select * from {{ ref('int_flow_results') }}),
     add_no_of_start_node as (
         select
             contacts.contact_phone,
-            count(if(start_node_in_flow = 'Yes', contact_phone,null)) as no_of_start_flow_responded
+            count(if(start_node_in_flow = 'Yes', contact_phone,null)) as no_of_start_flow_responded,
+            count(if(final_node_in_flow = 'Yes', contact_phone,null)) as no_of_final_flow_responded
         from contacts
         left join select_latest_response_for_flow_result using (contact_phone)
         group by 1
@@ -52,7 +53,8 @@ with flow_results as (select * from {{ ref('int_flow_results') }}),
         select
             contacts.*,
             no_of_start_flow_responded,
-            no_start_message_received
+            no_start_message_received,
+            no_of_final_flow_responded
         from contacts
         left join add_no_of_start_node using (contact_phone)
         left join add_no_of_start_message_received using (contact_phone)
@@ -60,5 +62,3 @@ with flow_results as (select * from {{ ref('int_flow_results') }}),
 select
     *
 from join_start_message_responded_receieved
-
-
