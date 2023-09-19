@@ -36,7 +36,8 @@ with flow_results as (select * from {{ ref('int_flow_results') }}),
         select
             contacts.contact_phone,
             count(if(start_node_in_flow = 'Yes', contact_phone,null)) as no_of_start_flow_responded,
-            count(if(final_node_in_flow = 'Yes', contact_phone,null)) as no_of_final_flow_responded
+            count(if(final_node_in_flow = 'Yes', contact_phone,null)) as no_of_final_flow_responded,
+            count(if(flow_success_node_in_flow = 'Yes' and desired_response = 'Yes', contact_phone, null)) as no_of_desired_response
         from contacts
         left join select_latest_response_for_flow_result using (contact_phone)
         group by 1
@@ -44,7 +45,7 @@ with flow_results as (select * from {{ ref('int_flow_results') }}),
     add_no_of_start_message_received as (
         select
             contacts.contact_phone,
-            count(if(start_node_in_flow='Yes' and message_direction='outbound', contact_phone,null)) as no_start_message_received
+            count(if(start_node_in_flow = 'Yes' and message_direction='outbound', contact_phone,null)) as no_start_message_received
         from contacts
         left join select_latest_response_for_messages using (contact_phone)
         group by 1
@@ -54,7 +55,8 @@ with flow_results as (select * from {{ ref('int_flow_results') }}),
             contacts.*,
             no_of_start_flow_responded,
             no_start_message_received,
-            no_of_final_flow_responded
+            no_of_final_flow_responded,
+            no_of_desired_response
         from contacts
         left join add_no_of_start_node using (contact_phone)
         left join add_no_of_start_message_received using (contact_phone)
