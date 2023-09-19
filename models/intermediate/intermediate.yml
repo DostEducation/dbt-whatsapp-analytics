@@ -69,12 +69,14 @@ models:
           - not_null
           - unique
 
-  # - name: int_extract_flow_results
-  #   tests:
-  #   - dbt_utils.unique_combination_of_columns:
-  #       combination_of_columns:
-  #         - flow_result_id
-  #         - result_key
+  - name: int_contact_flow_result
+    columns:
+      - name: contact_phone
+        description: Unique key for this table
+        tests:
+          - not_null
+          - unique
+
 
   - name: int_inbound_message_metrics
     columns:
