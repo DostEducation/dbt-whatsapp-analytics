@@ -12,6 +12,7 @@ with
     geographies as (select * from {{ ref("stg_geographies") }}),
     contact_fields as (select * from {{ ref('int_contact_fields') }}),
     contact_group as (select * from {{ ref('int_contact_groups') }}),
+    flow_results as (select * from {{ ref('int_flow_results') }}),
 
     append_aws_and_aww_contacts_expected as (
         select * from aws_contacts_expected

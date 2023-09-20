@@ -1,15 +1,11 @@
 with
     contacts as (select * from {{ ref('int_contacts') }}),
-
     AWS_metrics as (select * from {{ ref('int_AWS_metrics') }}),
-
     received_message_metrics as (select * from {{ ref('int_inbound_message_metrics') }}),
-
     latest_flow as (select * from {{ ref('int_latest_flow_for_user') }}),
-
     latest_flow_before_ten_days as (select * from {{ ref('int_message_not_received_in_ten_days') }}),
-
-    tracking_inbound_outbound_messages as (select * from {{ ref('int_tracking_inbound_outbound_messages') }})
+    tracking_inbound_outbound_messages as (select * from {{ ref('int_tracking_inbound_outbound_messages') }}),
+    flow_engagement_metrics as (select * from {{ ref('int_flow_engagement_metrics') }})
 
 select
     *
@@ -20,3 +16,4 @@ from
     left join received_message_metrics using (contact_phone)
     left join latest_flow_before_ten_days using (contact_phone)
     left join tracking_inbound_outbound_messages using (contact_phone)
+    left join flow_engagement_metrics using (contact_phone)

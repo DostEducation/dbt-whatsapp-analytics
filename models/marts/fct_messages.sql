@@ -19,3 +19,4 @@ with
     )
 select *
 from join_tables
+{# where contact_phone = '919675467828' and message_direction = 'outbound' and start_node_in_flow = 'Yes' #}
