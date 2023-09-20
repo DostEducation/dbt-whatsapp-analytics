@@ -37,7 +37,15 @@ with
         select
             flows.flow_uuid,
             count(if(start_node_in_flow = 'Yes', contact_phone,null)) as flows_opted_in,
-            count(if(final_node_in_flow = 'Yes', contact_phone,null)) as flows_completed
+            count(if(final_node_in_flow = 'Yes', contact_phone,null)) as flows_completed,
+            count(
+                distinct
+                if(
+                    flow_success_node_in_flow = 'Yes' and desired_response = 'Yes',
+                    contact_phone,
+                    null
+                )
+            ) as flows_succeeded
         from flows
         left join select_latest_response_for_flow_result using (flow_uuid)
         group by 1
@@ -55,9 +63,9 @@ with
     join_metrics as (
         select
             flows.*except(flow_config_json),
-            flows_started,
             flows_opted_in,
-            flows_completed
+            flows_completed,
+            flows_started
         from flows
         left join inbound_metrics using (flow_uuid)
         left join outbound_metrics using (flow_uuid)
