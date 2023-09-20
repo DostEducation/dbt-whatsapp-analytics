@@ -1,4 +1,5 @@
-with flow_results as (select * from {{ ref('int_flow_results') }}),
+with
+    flow_results as (select * from {{ ref('int_flow_results') }}),
     flows as (select * from {{ ref('int_flows') }}),
     messages as (select * from {{ ref('fct_messages') }}),
 
@@ -35,28 +36,28 @@ with flow_results as (select * from {{ ref('int_flow_results') }}),
     inbound_metrics as (
         select
             flows.flow_uuid,
-            flows.flow_name,
             count(if(start_node_in_flow = 'Yes', contact_phone,null)) as flows_opted_in,
             count(if(final_node_in_flow = 'Yes', contact_phone,null)) as flows_completed
         from flows
         left join select_latest_response_for_flow_result using (flow_uuid)
-        group by 1,2
+        group by 1
     ),
+
     outbound_metrics as (
         select
             flows.flow_uuid,
-            flows.flow_name,
             count(if(start_node_in_flow='Yes', contact_phone,null)) as flows_started
         from flows
         left join select_latest_response_for_messages using (flow_uuid)
-        group by 1,2
+        group by 1
     ),
+
     join_metrics as (
         select
             flows.*except(flow_config_json),
+            flows_started,
             flows_opted_in,
-            flows_completed,
-            flows_started
+            flows_completed
         from flows
         left join inbound_metrics using (flow_uuid)
         left join outbound_metrics using (flow_uuid)
