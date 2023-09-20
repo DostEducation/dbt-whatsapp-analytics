@@ -69,7 +69,7 @@ models:
           - not_null
           - unique
 
-  - name: int_contact_flow_result_messages
+  - name: int_flow_engagement_metrics
     columns:
       - name: contact_phone
         description: Unique key for this table

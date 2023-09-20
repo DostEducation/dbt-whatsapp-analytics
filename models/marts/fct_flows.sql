@@ -5,7 +5,7 @@ with flow_results as (select * from {{ ref('int_flow_results') }}),
     add_row_number_for_flow_results as (
         select
             *,
-            row_number() over(partition by contact_phone, flow_name order by inserted_at desc) as row_number
+            row_number() over(partition by contact_phone, flow_uuid order by inserted_at desc) as row_number
         from flow_results
         where inserted_at >= '2023-09-01'
     ),
@@ -32,34 +32,36 @@ with flow_results as (select * from {{ ref('int_flow_results') }}),
         where row_number = 1
     ),
     
-    add_no_of_start_node as (
+    inbound_metrics as (
         select
+            flows.flow_uuid,
             flows.flow_name,
-            count(if(start_node_in_flow = 'Yes', contact_phone,null)) as no_of_start_flow_responded,
-            count(if(final_node_in_flow = 'Yes', contact_phone,null)) as no_of_final_flow_responded
+            count(if(start_node_in_flow = 'Yes', contact_phone,null)) as flows_opted_in,
+            count(if(final_node_in_flow = 'Yes', contact_phone,null)) as flows_completed
         from flows
-        left join select_latest_response_for_flow_result using (flow_name)
-        group by 1
+        left join select_latest_response_for_flow_result using (flow_uuid)
+        group by 1,2
     ),
-    add_no_of_start_message_received as (
+    outbound_metrics as (
         select
+            flows.flow_uuid,
             flows.flow_name,
-            count(if(start_node_in_flow='Yes', contact_phone,null)) as no_start_message_received
+            count(if(start_node_in_flow='Yes', contact_phone,null)) as flows_started
         from flows
-        left join select_latest_response_for_messages using (flow_name)
-        group by 1
+        left join select_latest_response_for_messages using (flow_uuid)
+        group by 1,2
     ),
-    join_start_message_responded_receieved as (
+    join_metrics as (
         select
             flows.*except(flow_config_json),
-            no_of_start_flow_responded,
-            no_start_message_received,
-            no_of_final_flow_responded
+            flows_opted_in,
+            flows_completed,
+            flows_started
         from flows
-        left join add_no_of_start_node using (flow_name)
-        left join add_no_of_start_message_received using (flow_name)
+        left join inbound_metrics using (flow_uuid)
+        left join outbound_metrics using (flow_uuid)
     )
-    
+
 select
     *
-from join_start_message_responded_receieved
+from join_metrics
