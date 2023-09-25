@@ -1,7 +1,20 @@
 version: 2
 
 models:
-  
+  - name: fct_daily_user_engagement
+    columns: 
+      - name: contact_phone
+        description: primary key for this table
+        tests: 
+          - not_null
+      
+    tests:
+    - dbt_utils.unique_combination_of_columns:
+        combination_of_columns:
+          - contact_phone
+          - date_day
+          - flow_uuid_started
+
   - name: fct_contacts
     columns: 
       - name: contact_phone
