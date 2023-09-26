@@ -13,7 +13,6 @@ models:
         combination_of_columns:
           - contact_phone
           - date_day
-          - flow_uuid_started
 
   - name: fct_contacts
     columns: 
