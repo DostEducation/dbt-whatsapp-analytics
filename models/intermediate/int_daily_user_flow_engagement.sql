@@ -42,33 +42,37 @@ with
         select
             contact_phone,
             flow_uuid,
-            cast(message_inserted_at as date) as date_started
+            max(cast(message_inserted_at as date)) as date_started
         from select_latest_record_for_messages
         where start_node_in_flow = 'Yes'
+        group by 1, 2
     ),
     calculate_date_opted_in as (
         select
             contact_phone,
             flow_uuid,
-            cast(flow_result_inserted_at as date) as date_opted_in
+            max(cast(flow_result_inserted_at as date)) as date_opted_in
         from select_latest_record_for_flow_result
         where start_node_in_flow = 'Yes'
+        group by 1, 2
     ),
     calculate_date_completed as (
         select
             contact_phone,
             flow_uuid,
-            cast(flow_result_inserted_at as date) as date_completed
+            max(cast(flow_result_inserted_at as date)) as date_completed
         from select_latest_record_for_flow_result
         where final_node_in_flow = 'Yes'
+        group by 1, 2
     ),
     calculate_date_succeeded as (
         select
             contact_phone,
             flow_uuid,
-            cast(flow_result_inserted_at as date) as date_succeeded
+            max(cast(flow_result_inserted_at as date)) as date_succeeded
         from select_latest_record_for_flow_result
         where flow_success_node_in_flow = 'Yes'
+        group by 1, 2
     ),
 
     join_metrics as (
