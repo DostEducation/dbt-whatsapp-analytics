@@ -59,8 +59,7 @@ with daily_user_engagement as (select * from {{ ref('int_daily_user_engagement')
         from get_all_contact_details
             left join find_user_registration_date
                 on find_user_registration_date.contact_phone = get_all_contact_details.contact_phone
-                                            and find_user_registration_date.registration_date = get_all_contact_details.date_day
-    )
+        )
 
 select *
 from get_user_registration_date
