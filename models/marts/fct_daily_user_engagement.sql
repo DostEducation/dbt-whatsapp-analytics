@@ -16,21 +16,21 @@ with
         select
             contact_phone,
             date_day,
-            flows_started,
+            flows_started as no_of_flows_started,
             case when flows_started is not null then 'Yes' else "No"
-            end as flows_started_bool,
-            flows_opted_in,
+            end as no_of_flows_started_bool,
+            flows_opted_in as no_of_flows_opted_in,
             case
                 when flows_opted_in is not null then 'Yes' else "No"
-            end as flows_opted_in_bool,
-            flows_completed,
+            end as no_of_flows_opted_in_bool,
+            flows_completed as no_of_flows_completed,
             case
                 when flows_completed is not null then 'Yes' else "No"
-            end as flows_completed_bool,
-            flows_succeeded,
+            end as no_of_flows_completed_bool,
+            flows_succeeded as no_of_flows_succeeded,
             case
                 when flows_succeeded is not null then 'Yes' else "No"
-            end as flows_succeeded_bool
+            end as no_of_flows_succeeded_bool
         from daily_user_engagement
     ),
 
