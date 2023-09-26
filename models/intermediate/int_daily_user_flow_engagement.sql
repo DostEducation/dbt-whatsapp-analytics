@@ -1,7 +1,7 @@
 with
-    contacts as (Select * from {{ ref('fct_contacts') }}),
-    flows as (Select * from {{ ref('int_flows') }}),
-    inbound_metrics as (Select * from {{ ref('int_flow_results') }}),
+    contacts as (select * from {{ ref('fct_contacts') }}),
+    flows as (select * from {{ ref('int_flows') }}),
+    inbound_metrics as (select * from {{ ref('int_flow_results') }}),
     outbound_metrics as (select * from {{ ref('fct_messages') }}),
 
     cross_join_contacts_and_flows as (
