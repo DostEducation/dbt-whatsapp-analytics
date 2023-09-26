@@ -2,6 +2,18 @@ version: 2
 
 models:
   
+  - name: int_daily_user_engagement
+    columns: 
+      - name: contact_phone
+        description: primary key for this table
+        tests: 
+          - not_null
+    tests:
+    - dbt_utils.unique_combination_of_columns:
+        combination_of_columns:
+          - contact_phone
+          - date_day
+
   - name: int_contacts
     columns: 
       - name: contact_phone
