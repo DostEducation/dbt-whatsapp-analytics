@@ -40,6 +40,7 @@ with
         select
             get_output_name.*,
             result_input,
+            flow_result_inserted_at,
             desired_response
         from get_output_name
             left join select_latest_record_for_flow_result using (contact_phone, node_label)
