@@ -1,5 +1,5 @@
 with
-    messages as (select * from {{ ref('stg_messages') }}),
+    messages as (select * from {{ ref('fct_messages') }}),
     add_row_number as (
         select
             flow_name,

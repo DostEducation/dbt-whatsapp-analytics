@@ -32,7 +32,9 @@ with
                 partition by contact_phone, flow_uuid, node_label order by message_inserted_at desc
             ) as row_number
         from outbound_metrics
-        where message_inserted_at >= '2023-09-01' and message_direction = 'outbound' and node_type = 'HSM Mesage'
+        where message_inserted_at >= '2023-09-01' 
+        and message_direction = 'outbound' 
+        and node_type = 'HSM Mesage'
     ),
     select_latest_record_for_messages as (
         select * from add_row_number_for_messages where row_number = 1

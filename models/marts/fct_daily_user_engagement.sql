@@ -44,3 +44,4 @@ with
 
 select *
 from get_all_contact_details
+{# where contact_phone = '918562098682' order by date_day asc #}

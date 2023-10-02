@@ -54,4 +54,3 @@ with
 
 select *
 from collate_all_dates
-order by flows_started desc
