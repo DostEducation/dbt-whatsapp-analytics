@@ -1,5 +1,5 @@
 with
-    messages as (select * from {{ ref('stg_messages') }}),
+    messages as (select * from {{ ref('fct_messages') }}),
     add_row_number as (
         select
             *,
@@ -23,3 +23,4 @@ with
 select 
     get_latest_message_for_contact.*
 from get_latest_message_for_contact
+{# where contact_phone = '919992731586' #}
