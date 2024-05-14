@@ -64,4 +64,13 @@ models:
           - flow_uuid
           - flow_sr_no
 
-
+  - name: fct_onboarding
+    columns: 
+      - name: user_phone
+        description: phone number of the user
+        tests: 
+          - not_null
+      - name: user_id
+        description: Primary key of the table
+        tests: 
+          - not_null

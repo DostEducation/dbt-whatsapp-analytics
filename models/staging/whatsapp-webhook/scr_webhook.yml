@@ -1,10 +1,10 @@
 version: 2
 
 sources:
-  - name: webhook
+  - name: whatsapp_webhook_prod
     description: dataset created by whatsapp webhooks on BigQuery
     database: cryptic-gate-211900
-    schema: 'whatsapp_webhook_prod'
+    schema: 'whatsapp_webhook_prod_v2'
     tables:
       - name: users
         description: users details.
@@ -16,4 +16,3 @@ sources:
         description: Gives you the context of users flow details, which flow users have been through, timestamp, etc.
       - name: user_indicator_responses
         description: Captures details about users indicatores we are capturing during flow execution.
-

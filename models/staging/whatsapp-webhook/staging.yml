@@ -1,1 +1,55 @@
-# todo - need to add more details
+version: 2
+
+models:
+
+  - name: users
+    description: details of the user getting from the glific.
+    columns: 
+      - name: id
+        description: primary key for this table.
+        tests: 
+          - not_null
+      - name: phone
+        description: index for this table and the phone number of the user.
+        tests: 
+          - not_null
+      - name: glific_user_id
+        description: id of the user in the glific.
+      - name: name
+        description: name of the user in the glific.
+      - name: location
+        description: location of the user.
+      - name: created_on
+        description: timestampz when the new entry created.
+        tests: 
+          - not_null
+      - name: updated_on
+        description: last timestampz when the entry details updated.
+        tests: 
+          - not_null
+
+  - name: user_attributes
+    description: custom field details of the user in the glific.
+    columns: 
+      - name: id
+        description: primary key for this table.
+        tests: 
+          - not_null
+      - name: user_id
+        description: forign key for this table.
+      - name: user_phone
+        description: index for this table and the phone number of the user.
+        tests: 
+          - not_null
+      - name: field_name
+        description: name of the custom fields at the glific.
+      - name: field_value
+        description: value of the custom fields at the glific.
+      - name: created_on
+        description: timestampz when the new entry created.
+        tests: 
+          - not_null
+      - name: updated_on
+        description: last timestampz when the entry details updated.
+        tests: 
+          - not_null
