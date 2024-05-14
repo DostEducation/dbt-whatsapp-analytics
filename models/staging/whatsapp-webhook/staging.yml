@@ -1,17 +1,16 @@
 version: 2
 
 models:
-
   - name: users
     description: details of the user getting from the glific.
-    columns: 
+    columns:
       - name: id
         description: primary key for this table.
-        tests: 
+        tests:
           - not_null
       - name: phone
         description: index for this table and the phone number of the user.
-        tests: 
+        tests:
           - not_null
       - name: glific_user_id
         description: id of the user in the glific.
@@ -21,25 +20,25 @@ models:
         description: location of the user.
       - name: created_on
         description: timestampz when the new entry created.
-        tests: 
+        tests:
           - not_null
       - name: updated_on
         description: last timestampz when the entry details updated.
-        tests: 
+        tests:
           - not_null
 
   - name: user_attributes
     description: custom field details of the user in the glific.
-    columns: 
+    columns:
       - name: id
         description: primary key for this table.
-        tests: 
+        tests:
           - not_null
       - name: user_id
         description: forign key for this table.
       - name: user_phone
         description: index for this table and the phone number of the user.
-        tests: 
+        tests:
           - not_null
       - name: field_name
         description: name of the custom fields at the glific.
@@ -47,9 +46,9 @@ models:
         description: value of the custom fields at the glific.
       - name: created_on
         description: timestampz when the new entry created.
-        tests: 
+        tests:
           - not_null
       - name: updated_on
         description: last timestampz when the entry details updated.
-        tests: 
+        tests:
           - not_null

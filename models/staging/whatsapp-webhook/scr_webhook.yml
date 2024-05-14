@@ -4,7 +4,7 @@ sources:
   - name: whatsapp_webhook_prod
     description: dataset created by whatsapp webhooks on BigQuery
     database: cryptic-gate-211900
-    schema: 'whatsapp_webhook_prod_v2'
+    schema: "whatsapp_webhook_prod_v2"
     tables:
       - name: users
         description: users details.

@@ -1,6 +1,4 @@
-with
-    flow_results as (select * from {{ ref('int_user_onboarding') }})
+with flow_results as (select * from {{ ref("int_user_onboarding") }})
 
-select
-    *
+select *
 from flow_results
