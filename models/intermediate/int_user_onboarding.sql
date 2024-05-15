@@ -3,7 +3,7 @@
 {% endset %}
 
 with
-    user_attributes_cte as (
+    user_attributes as (
         select
             user_id,
             {% set field_names = run_query(field_names_query) %}
@@ -21,7 +21,7 @@ with
         group by user_id
     )
 
-select gu.*, ua.* except(user_id)
-from {{ ref("stg_users") }} gu
-left join user_attributes_cte ua on gu.user_id = ua.user_id
-where gu.user_id is not null
+select users.*, user_attributes.* except(user_id)
+from {{ ref("stg_users") }} users
+left join user_attributes on users.id = user_attributes.user_id
+where users.id is not null
