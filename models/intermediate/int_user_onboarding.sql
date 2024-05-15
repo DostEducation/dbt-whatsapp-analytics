@@ -1,31 +1,27 @@
+{% set field_names_query %}
+    SELECT DISTINCT field_name FROM {{ ref('stg_user_attributes') }}
+{% endset %}
+
 with
-    glific_users as (select * from {{ ref("stg_users") }}),
-
-    glific_users_attributes as (select * from {{ ref("stg_user_attributes") }}),
-
-    user_onboarding_data as (
+    user_attributes_cte as (
         select
             user_id,
-            max(
-                case when field_name = 'district' then field_value else null end
-            ) as district,
-            max(case when field_name = 'state' then field_value else null end) as state,
-            max(
-                case when field_name = 'child_count' then field_value else null end
-            ) as child_count,
-            max(
-                case when field_name = 'parent_type' then field_value else null end
-            ) as parent_type
-        from glific_users_attributes
+            {% set field_names = run_query(field_names_query) %}
+            {% for field_name in field_names %}
+                max(
+                    case
+                        when field_name = '{{ field_name.field_name }}'
+                        then field_value
+                        else null
+                    end
+                ) as {{ field_name.field_name }}
+                {% if not loop.last %},{% endif %}
+            {% endfor %}
+        from {{ ref("stg_user_attributes") }}
         group by user_id
-    ),
-
-    join_tables as (
-        select glific_users.*, user_onboarding_data.* except (user_id)
-        from glific_users
-        left join user_onboarding_data using (user_id)
     )
 
-select *
-from join_tables
-where user_id is not null
+select gu.*, ua.* except(user_id)
+from {{ ref("stg_users") }} gu
+left join user_attributes_cte ua on gu.user_id = ua.user_id
+where gu.user_id is not null

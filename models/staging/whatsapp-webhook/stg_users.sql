@@ -1,9 +1,5 @@
 with
-    source as (
-
-        select * from {{ source("whatsapp_webhook_prod", "users") }}
-
-    ),
+    source as (select * from {{ source("whatsapp_webhook_prod", "users") }}),
 
     users as (
 
