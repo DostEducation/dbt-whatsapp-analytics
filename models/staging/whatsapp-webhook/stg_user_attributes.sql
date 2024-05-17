@@ -1,5 +1,5 @@
 with
-    source as (select * from {{ source("whatsapp_webhook_prod", "user_attributes") }}),
+    source as (select * from {{ source("whatsapp_webhook", "user_attributes") }}),
 
     user_attributes as (
 

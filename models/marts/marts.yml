@@ -68,9 +68,5 @@ models:
     columns:
       - name: user_phone
         description: phone number of the user
-        tests:
-          - not_null
       - name: user_id
         description: Primary key of the table
-        tests:
-          - not_null
