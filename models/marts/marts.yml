@@ -2,66 +2,71 @@ version: 2
 
 models:
   - name: fct_daily_user_engagement
-    columns: 
+    columns:
       - name: contact_phone
         description: primary key for this table
-        tests: 
+        tests:
           - not_null
-      
+
     tests:
-    - dbt_utils.unique_combination_of_columns:
-        combination_of_columns:
-          - contact_phone
-          - date_day
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - contact_phone
+            - date_day
 
   - name: fct_questions_impact
     tests:
-    - dbt_utils.unique_combination_of_columns:
-        combination_of_columns:
-          - contact_phone
-          - node_label
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - contact_phone
+            - node_label
 
   - name: fct_contacts
-    columns: 
+    columns:
       - name: contact_phone
         description: primary key for this table
-        tests: 
+        tests:
           - not_null
           - unique
   - name: fct_messages
-    columns: 
+    columns:
       - name: message_id
         description: primary key for this table
-        tests: 
+        tests:
           - not_null
           - unique
-  
+
   - name: fct_outputs
-    columns: 
+    columns:
       - name: output_id
         description: primary key for this table
-        tests: 
+        tests:
           - not_null
           - unique
-  
+
   - name: fct_nodes
-    columns: 
+    columns:
       - name: node_label
         description: primary key for this table
-        tests: 
+        tests:
           - not_null
           - unique
-  
+
   - name: fct_flows
-    columns: 
+    columns:
       - name: flow_id
         description: Primary key of the table
         tests:
-         - not_null
+          - not_null
     tests:
-    - dbt_utils.unique_combination_of_columns:
-        combination_of_columns:
-          - flow_uuid
-          - flow_sr_no
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - flow_uuid
+            - flow_sr_no
 
-
+  - name: fct_onboarding
+    columns:
+      - name: user_phone
+        description: phone number of the user
+      - name: user_id
+        description: Primary key of the table
