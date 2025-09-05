@@ -35,9 +35,9 @@ with
 
     add_total_users_on_glific as (
         select *
-        from
-            outputs
-            left join union_table on user_type = user_for
+        from outputs o
+        left join union_table u
+        on u.user_type = o.user_for
     ),
 
     users_responding as (
