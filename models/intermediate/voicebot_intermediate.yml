@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: int_voicebot_call_facts
+    description: >
+      Calls with the provider's view of the same call joined on, plus the
+      derivations more than one metric needs. A full outer join, because a call
+      that produced only one of the two records is still a call -- dropping it
+      would quietly shrink every denominator built on this model.
+    columns:
+      - name: call_sid
+        description: The provider's call identifier. Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: call_duration_s
+        description: The provider's duration where there is one, the bot's own measurement otherwise.
+      - name: call_date_ist
+        description: Call date in IST. Every date and hour in this model is local time, so "calls on the 18th" means the day the caregiver experienced.
+      - name: call_week_ist
+        description: Monday-starting week in IST. The grain M&E slices the pilot by.
+      - name: is_zero_turn_call
+        description: A call where no exchange completed. Defined once here rather than re-derived per metric.
+      - name: ended_by_caller
+        description: Whether the caller hung up. Relevant to satisfaction, because the bot can only ask for a rating on calls it ends itself.
+      - name: has_bot_summary
+        description: Whether the bot's end-of-call summary arrived.
+      - name: has_provider_callback
+        description: Whether any provider callback arrived. Both flags exist because a call can produce one without the other.

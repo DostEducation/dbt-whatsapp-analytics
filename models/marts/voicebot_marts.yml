@@ -1,0 +1,95 @@
+version: 2
+
+models:
+  - name: fct_voicebot_calls
+    description: >
+      One row per voice bot call -- the table to start from for anything
+      call-shaped: reach, drop-off, duration, satisfaction, escalation.
+    columns:
+      - name: call_sid
+        description: The provider's call identifier. Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: turn_count
+        description: >
+          Conversation length, and the authoritative count. Larger than
+          instrumented_turn_count, because scripted turns emit no per-turn
+          metrics. Divide by this one.
+      - name: instrumented_turn_count
+        description: Turns that emitted per-turn metrics. A subset of turn_count -- use it only when the question is specifically about answered turns.
+      - name: median_first_audio_s
+        description: Median wait before the caller heard anything back, over the call. Median rather than mean, so one slow turn does not redefine the call.
+
+  - name: fct_voicebot_turns
+    description: One row per instrumented turn, with enough of its call's context attached that turn-level questions need no join.
+    columns:
+      - name: turn_key
+        description: Surrogate key over call_sid and turn_index. Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: is_last_instrumented_turn
+        description: Whether this was the last instrumented turn of its call. Drop-off is asked of this column rather than of a max() at read time.
+
+  - name: fct_voicebot_caregivers
+    description: >
+      One row per identified caregiver, keyed by the salted hash prefix. Calls
+      where the provider sent no caller ID have no key and are excluded -- they
+      remain in fct_voicebot_calls, but cannot be attributed to anyone. That is
+      why the repeat-caller metrics carry a smaller denominator than the call
+      count, and it is a property of the telephony rather than of this pipeline.
+    columns:
+      - name: hashed_phone_prefix
+        description: Eight characters of a salted hash. Primary key. Not reversible to a phone number.
+        tests:
+          - unique
+          - not_null
+      - name: is_repeat_caller_within_7d
+        description: Whether this caregiver called again within seven days of their first call. The framework's 3.1 definition, evaluated per caregiver.
+
+  - name: fct_voicebot_pilot_metrics
+    description: >
+      The 23 metrics of the pilot measurement framework's Framework sheet, one
+      table, weekly.
+
+      Every one of the 23 emits a row every week, including the ones that cannot
+      be computed from app data. A metric that silently vanishes reads as zero on
+      a dashboard; one that reports itself as needing a human review, or an input
+      nobody has supplied, reads as what it actually is. Read `status` before
+      `metric_value`, and `metric_note` when status is not "computed".
+    columns:
+      - name: metric_key
+        description: Surrogate key over metric, period and dimension. Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: metric_id
+        description: The framework's own identifier, 0.1 through 5.3.
+        tests:
+          - not_null
+      - name: period_start
+        description: Monday of the week this row covers.
+      - name: dimension_value
+        description: >
+          Null for a metric that is a single number; the breakdown for one that
+          is a distribution -- a category for 1.1, an hour for 2.4, a phase for
+          5.3, a percentile for 2.1. Lets scalars and distributions share one
+          table instead of needing two shapes.
+      - name: metric_value
+        description: The metric itself, where it can be computed. Null otherwise -- check status.
+      - name: numerator
+        description: The count the metric is built from. Sometimes populated where metric_value is not, when the numerator is ours but the denominator is not.
+      - name: denominator
+        description: What the numerator is measured against, where that is known.
+      - name: status
+        description: >
+          One of computed, partial, needs_external_input, human_review. Read this
+          first. "partial" means the number is real but narrower than the
+          framework's definition, and metric_note says how.
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['computed', 'partial', 'needs_external_input', 'human_review']
+      - name: metric_note
+        description: What is missing, or how this differs from the framework's definition. Null when the metric is computed as defined.
