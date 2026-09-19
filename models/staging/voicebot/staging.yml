@@ -1,0 +1,140 @@
+version: 2
+
+models:
+  - name: stg_voicebot_calls
+    description: >
+      One row per voice bot call, from the summary emitted when the call ends.
+      Covers what happened on the call as a whole -- how long, how many turns,
+      whether consent was given, where the caller was when it ended.
+    columns:
+      - name: call_sid
+        description: The provider's call identifier. Primary key, and the join key to every other voice bot model.
+        tests:
+          - unique
+          - not_null
+      - name: hashed_phone_prefix
+        description: >
+          Eight characters of a salted hash of the caregiver's number. Groups one
+          caller's calls together without identifying them. The raw number is never
+          in this pipeline.
+      - name: call_started_at
+        description: When the call began. Distinct from logged_at, which is when the summary was written -- that is, when the call ended.
+      - name: call_duration_s
+        description: Call length in seconds as the bot measured it. For the provider's billed duration, use stg_voicebot_telephony.
+      - name: turn_count
+        description: >
+          Completed exchanges, and the authoritative count for a call. Zero means
+          the caller hung up before a single one finished. This is larger than the
+          number of rows in stg_voicebot_turns, because only turns that go through
+          the answer path emit per-turn metrics -- divide by this, not by a row count.
+      - name: final_state
+        description: The state machine's state when the call ended.
+      - name: phase_at_disconnect
+        description: >
+          Where the caller was when the call ended. The most useful field for
+          drop-off analysis -- 'consent' means they never got past the opening,
+          'sawaal' means they left part-way through a question.
+      - name: consent_given
+        description: Whether the caller consented to the recording notice.
+      - name: is_returning_caller
+        description: Whether this hashed caller had called before. Null where the provider sent no caller ID.
+      - name: csat_rating
+        description: >
+          The caller's rating, where one was given. Null on most calls by design,
+          not by fault: the bot can only ask on calls it finishes itself, and most
+          callers hang up first. Null means "never asked", not "no opinion" -- do
+          not average this without that denominator.
+      - name: is_csat_suspect
+        description: Set when the rating looks like it was captured from speech that was not a rating.
+      - name: reprompt_count
+        description: Times the bot had to ask again because it did not get a usable answer.
+      - name: fallback_count
+        description: Times the bot fell back to a generic reply.
+
+  - name: stg_voicebot_turns
+    description: >
+      One row per conversational turn -- what the caregiver said, what the bot
+      decided, what it replied, and the latency of each stage.
+    columns:
+      - name: turn_key
+        description: Surrogate key over call_sid and turn_index. Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: call_sid
+        description: The call this turn belongs to. Joins to stg_voicebot_calls.
+        tests:
+          - not_null
+      - name: turn_index
+        description: >
+          Position of the turn within the call. Sparse and non-contiguous by
+          design -- scripted turns such as consent and menu do not emit per-turn
+          metrics, so gaps here are expected and are not missing data.
+      - name: caregiver_said
+        description: >
+          Verbatim speech from a real caller, in Hindi, as the speech recogniser
+          heard it. It may contain names, places, or anything else the caller chose
+          to say -- the most sensitive column in this project. Restrict access, and
+          do not copy it into anything more widely shared.
+      - name: bot_said
+        description: >
+          What the bot actually replied. Populated only from 16 Sep 2026, when
+          recording the bot's own words was switched on; earlier turns are null and
+          cannot be backfilled.
+      - name: turn_decision
+        description: What kind of turn this was -- generated answer, scripted template, safety response, consent, or end-of-call.
+      - name: stt_confidence
+        description: The speech recogniser's confidence in its transcript.
+      - name: knowledge_module_used
+        description: Which knowledge module answered, where one did.
+      - name: safety_category
+        description: Set where the turn tripped a safety rule.
+      - name: turn_latency_s
+        description: Whole-turn latency.
+      - name: first_audio_s
+        description: Time until the caller heard anything back. The one the caller actually experiences as waiting.
+      - name: was_fallback_triggered
+        description: Whether the bot fell back to a generic reply on this turn.
+      - name: was_escalated
+        description: Whether this turn escalated to a human.
+
+  - name: stg_voicebot_telephony
+    description: >
+      One row per call, from the provider's own callbacks. Exotel sends two
+      callback shapes to two endpoints and neither is complete alone -- the status
+      one carries billed duration, the stream one carries who hung up. This model
+      puts both back together.
+    columns:
+      - name: call_sid
+        description: The provider's call identifier. Primary key, joins to stg_voicebot_calls.
+        tests:
+          - unique
+          - not_null
+      - name: exotel_number
+        description: >
+          The DOST line the caregiver dialled -- not the caregiver's own number.
+          Two are in use across the pilot and no call mixes them, so this separates
+          the entry points cleanly.
+      - name: hashed_phone_prefix
+        description: Eight characters of a salted hash of the caregiver's number.
+      - name: call_duration_s
+        description: >
+          How long the call ran, per the provider. Use this one. It prefers the
+          stream callback because that is the callback the provider actually
+          populates, and falls back to the status callback if that ever changes.
+      - name: stream_duration_s
+        description: Duration as reported on the stream callback. Populated on every call seen so far, and agrees with the bot's own measurement to within a second.
+      - name: dial_call_duration_s
+        description: >
+          Duration as reported on the status callback -- measured as 0 on all 47
+          callbacks seen over three days, so it is not usable. Kept only so that a
+          change at the provider's end becomes visible instead of being silently
+          dropped. Prefer call_duration_s.
+      - name: disconnected_by
+        description: Who ended the call. The clearest available signal of an abandoned call.
+      - name: recording_url
+        description: Where the recording lives, preferring the stream callback's URL because it is the one that resolves.
+      - name: has_status_callback
+        description: Whether the status callback arrived for this call.
+      - name: has_stream_callback
+        description: Whether the stream callback arrived. Both flags exist because a call can produce one without the other.

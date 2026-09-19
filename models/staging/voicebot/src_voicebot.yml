@@ -1,0 +1,36 @@
+version: 2
+
+sources:
+  - name: voicebot
+    description: >
+      Hindi voice bot telemetry, delivered by a Cloud Logging sink rather than by
+      a loader. Cloud Run writes one structured log entry per analytics event and
+      the sink copies the matching entries into BigQuery, so there is no extract
+      step to schedule and nothing running on the call path.
+    database: cryptic-gate-211900
+    schema: voicebot_analytics
+    tables:
+      - name: run_googleapis_com_stdout
+        description: >
+          Every voice bot analytics event, one row each, in Cloud Logging's own
+          LogEntry shape. The payload is a single STRUCT whose fields are the
+          union of every event type ever seen -- so a row only populates the
+          fields its own event emits, and the rest are null.
+
+          Two properties of this table drive how the staging models are written.
+          First, the STRUCT grows: a field appears as a column only once some
+          event has emitted it, so selecting jsonPayload.<field> for a rare
+          field fails outright until the first one arrives. The staging models
+          therefore read the payload as JSON, which yields null for an absent
+          field instead of an error. Second, the sink delivers at least once,
+          so rows are deduplicated on insert_id.
+
+          The table also carries an httpRequest column, because it is part of
+          Cloud Logging's standard shape. It is always null here: the sink is
+          pinned to the stdout stream, and request logs -- the ones that carry
+          the caller's phone number in the URL -- are on a different stream and
+          cannot enter.
+        loaded_at_field: timestamp
+        freshness:
+          warn_after: {count: 6, period: hour}
+          error_after: {count: 24, period: hour}
