@@ -5,15 +5,7 @@
 -- which was unmeasurable while the offer was made but the answer never kept.
 
 with
-    source as (select * from {{ source("voicebot", "run_googleapis_com_stdout") }}),
-
-    as_json as (
-        select
-            insertId,
-            timestamp as logged_at,
-            to_json_string(jsonPayload) as payload
-        from source
-    ),
+    as_json as (select * from {{ ref("stg_voicebot_events") }}),
 
     followups as (
         select * from as_json where json_value(payload, '$.event') = 'followup_answer'
@@ -26,7 +18,7 @@ with
                 select
                     row_number() over (
                         partition by json_value(payload, '$.call_sid')
-                        order by logged_at desc, insertId desc
+                        order by logged_at desc, insert_id desc
                     ) as row_number,
                     followups.*
                 from followups

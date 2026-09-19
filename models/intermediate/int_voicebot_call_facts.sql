@@ -41,6 +41,7 @@ with
             calls.reprompt_count,
             calls.fallback_count,
             coalesce(calls.was_escalated, telephony.was_escalated) as was_escalated,
+            calls.escalation_type,
 
             telephony.exotel_number,
             telephony.disconnected_by,

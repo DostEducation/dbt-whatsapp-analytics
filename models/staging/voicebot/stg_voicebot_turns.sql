@@ -12,15 +12,7 @@
 -- grows field by field, so a rarely-emitted field is not a column yet.
 
 with
-    source as (select * from {{ source("voicebot", "run_googleapis_com_stdout") }}),
-
-    as_json as (
-        select
-            insertId,
-            timestamp as logged_at,
-            to_json_string(jsonPayload) as payload
-        from source
-    ),
+    as_json as (select * from {{ ref("stg_voicebot_events") }}),
 
     turns as (
         select * from as_json where json_value(payload, '$.event') = 'turn_metrics'
@@ -37,7 +29,7 @@ with
                         partition by
                             json_value(payload, '$.call_sid'),
                             json_value(payload, '$.turn_index')
-                        order by logged_at desc, insertId desc
+                        order by logged_at desc, insert_id desc
                     ) as row_number,
                     turns.*
                 from turns
@@ -99,7 +91,9 @@ with
                 json_value(payload, '$.fallback_triggered') as bool
             ) as was_fallback_triggered,
             json_value(payload, '$.fallback_reason') as fallback_reason,
-            cast(json_value(payload, '$.escalation') as bool) as was_escalated,
+            -- An enum (REFERRAL, HANDOFF), not a flag -- see stg_voicebot_calls.
+            json_value(payload, '$.escalation') as escalation_type,
+            json_value(payload, '$.escalation') is not null as was_escalated,
 
             json_value(payload, '$.tts_speaker') as tts_speaker,
             cast(

@@ -8,15 +8,7 @@
 -- This model puts both back together, one row per call.
 
 with
-    source as (select * from {{ source("voicebot", "run_googleapis_com_stdout") }}),
-
-    as_json as (
-        select
-            insertId,
-            timestamp as logged_at,
-            to_json_string(jsonPayload) as payload
-        from source
-    ),
+    as_json as (select * from {{ ref("stg_voicebot_events") }}),
 
     latest_per_call_and_event as (
         select *
@@ -27,7 +19,7 @@ with
                         partition by
                             json_value(payload, '$.call_sid'),
                             json_value(payload, '$.event')
-                        order by logged_at desc, insertId desc
+                        order by logged_at desc, insert_id desc
                     ) as row_number,
                     as_json.*
                 from as_json

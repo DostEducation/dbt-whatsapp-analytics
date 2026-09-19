@@ -34,3 +34,19 @@ sources:
         freshness:
           warn_after: {count: 6, period: hour}
           error_after: {count: 24, period: hour}
+
+      - name: stdout_backfill
+        description: >
+          The same events, for the period before the sink existed. A sink only
+          collects from the moment it is created and does not backfill, so
+          everything the bot emitted before 2026-09-19 09:57 UTC was sitting in
+          Cloud Logging with a 30-day expiry and nowhere else. It was extracted
+          once under the sink's own filter -- stdout stream, non-empty event --
+          and loaded here: 3,331 entries spanning 21 Aug to 19 Sep.
+
+          Partitioned on timestamp so the dataset's retention reaches it exactly
+          as it reaches the sink's own table. A non-partitioned table would have
+          sat outside that mechanism entirely and quietly kept caregiver-derived
+          data forever.
+
+          This is a one-off load, not a pipeline. Nothing writes to it again.

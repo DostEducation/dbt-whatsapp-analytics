@@ -6,15 +6,7 @@
 -- Selecting it directly fails the whole model; JSON_VALUE returns null.
 
 with
-    source as (select * from {{ source("voicebot", "run_googleapis_com_stdout") }}),
-
-    as_json as (
-        select
-            insertId,
-            timestamp as logged_at,
-            to_json_string(jsonPayload) as payload
-        from source
-    ),
+    as_json as (select * from {{ ref("stg_voicebot_events") }}),
 
     call_summaries as (
         select * from as_json where json_value(payload, '$.event') = 'call_summary'
@@ -29,7 +21,7 @@ with
                 select
                     row_number() over (
                         partition by json_value(payload, '$.call_sid')
-                        order by logged_at desc, insertId desc
+                        order by logged_at desc, insert_id desc
                     ) as row_number,
                     call_summaries.*
                 from call_summaries
@@ -40,7 +32,7 @@ with
     select_and_rename_columns as (
         select
             json_value(payload, '$.call_sid') as call_sid,
-            insertId as log_insert_id,
+            insert_id as log_insert_id,
             logged_at,
 
             -- When the call began, as the bot saw it. logged_at is when the
@@ -66,7 +58,12 @@ with
             cast(json_value(payload, '$.consent_given') as bool) as consent_given,
             cast(json_value(payload, '$.returning_caller') as bool) as is_returning_caller,
             cast(json_value(payload, '$.child_age_known') as bool) as is_child_age_known,
-            cast(json_value(payload, '$.escalation_flag') as bool) as was_escalated,
+            -- Not a boolean: the bot records WHAT KIND of escalation it was,
+            -- and the kinds are REFERRAL and HANDOFF. Keeping the type means
+            -- the escalation-load metric can separate a referral from a live
+            -- transfer, which cost very different things to staff.
+            json_value(payload, '$.escalation_flag') as escalation_type,
+            json_value(payload, '$.escalation_flag') is not null as was_escalated,
             json_value(payload, '$.menu_choice') as menu_choice,
 
             -- Populated on a minority of calls by design, not by fault: the bot
